@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2; /* Light grey background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Make the page fill the entire viewport height */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column; /* Arrange items vertically */
+            align-items: center; /* Center items horizontally */
+        }
+
+        .box-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+        }
+
+        .rectangle-box {
+            width: 400px;
+            height: 400px;
+            background-color: lightgrey;
+            margin-bottom: 20px; /* Add some space between the box and the button */
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue button color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #0056b3; /* Darker blue color on hover */
+        }
+
+        .label {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box-container">
+            <h2 class="label">Ready, and Click!</h2>
+            <div class="rectangle-box"></div>
+            <!-- Button to take attendance -->
+            <button class="button" onclick="submitButtonclicked()">Submit</button>
+        </div>
+    </div>
+    <script>
+        function submitButtonclicked() {
+            // Add code here to start webcam
+            window.alert('Its a match! Your attendence is submitted');
+            event.preventDefault();
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

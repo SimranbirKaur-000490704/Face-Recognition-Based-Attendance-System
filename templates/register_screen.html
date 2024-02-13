@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Screen</title>
+    <style>
+        .container {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .left-half, .right-half {
+            width: 50%;
+            padding: 20px;
+        }
+        .left-half {
+            background-color: #f0f0f0;
+        }
+        .right-half {
+            background-color: #a29f9f;
+        }
+        #video-container {
+            width: 100%;
+            height: auto;
+            border: 1px solid black;
+            margin-bottom: 20px;
+        }
+        #form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            
+        }
+        #registration form{
+            width: 100%;
+            height: auto;
+            border: 1px solid black;
+            margin-bottom: 20px;
+        }
+        #form-container .button-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        #form-container button {
+            flex-grow: 1;
+            width: 50%; /* Set the width of each button to 50% */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-half">
+            <div id="video-container">
+                <video id="video" width="100%" height="100%" autoplay></video>
+            </div>
+            <button onclick="startWebcam()">Start Webcam</button>
+        </div>
+        <div class="right-half">
+            <div id="registration form"  ></div>
+                <form id="form-container" width="100%" height="100%">
+                    <input type="text" name="name" placeholder="Name">
+                    <input type="text" name="email" placeholder="Email">
+                    <input type="text" name="message" placeholder="Message">
+                    <div class="button-container">
+                        <button type="submit" onclick="backButtonClicked() ">back</button>
+                        <button type="back" onclick="registrationButtonClicked('/')">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startWebcam() {
+            // Add code here to start webcam
+            alert('Webcam will be started here');
+        }
+        function backButtonClicked() {
+            event.preventDefault();
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

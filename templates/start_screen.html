@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Make the page fill the entire viewport height */
+            background-color: #f5f5f5; /* Light pastel shade of grey */
+        }
+
+        .container {
+            width: 800px;
+            height: 100px;
+            background-color: #e0e0e0; /* Light pastel shade of grey */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+        }
+
+        .label {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #ffb74d; /* Light pastel shade of orange */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #ff9800; /* Darker shade of orange on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="label">Welcome to Saskatchewan Polytechnic</h1>
+        <div class="button-container">
+            <!-- Buttons inside the rectangle -->
+            <button onclick="registerButtonClicked('/register_screen')">Register</button>
+            <button onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
+        </div>
+    </div>
+
+    <script>
+        function registerButtonClicked(url) {
+            window.location.href = url;
+        }
+    </script>
+    <script>
+        function attendencebuttonClicked(url) {
+            window.location.href = url;
+            
+        }
+    </script>
+</body>
+</html>
+
