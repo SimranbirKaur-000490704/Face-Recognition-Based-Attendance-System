@@ -56,24 +56,62 @@
             font-size: 20px;
             margin-bottom: 10px;
         }
+        .video-container{
+            text-align: center; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="box-container">
+
+        <div class="box-container" width="50%" height="50%">
             <h2 class="label">Ready, and Click!</h2>
-            <div class="rectangle-box"></div>
+
+            <div  id="video-container" class="video-container" >
+            <img id="webcam-feed" src="/open-webcam" alt="Webcam Feed" width="50%" height="50%">
+            </div>
             <!-- Button to take attendance -->
-            <button class="button" onclick="submitButtonclicked()">Submit</button>
+            <button  id="submit" class="button">Submit</button>
         </div>
     </div>
-    <script>
+    <!--script>
         function submitButtonclicked() {
             // Add code here to start webcam
             window.alert('Its a match! Your attendence is submitted');
             event.preventDefault();
             window.history.back();
         }
+    </script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const captureButton = document.getElementById('submit');
+            const webcamFeed = document.getElementById('webcam-feed');
+
+            captureButton.addEventListener('click', async () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = webcamFeed.width;
+                canvas.height = webcamFeed.height;
+                const context = canvas.getContext('2d');
+                context.drawImage(webcamFeed, 0, 0, canvas.width, canvas.height);
+
+                const dataURL = canvas.toDataURL('image/jpeg');
+
+                // Send dataURL to server to save the image
+                const response = await fetch('/save_image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image_data: dataURL })
+                });
+
+                if (response.ok) {
+                    alert('Image captured and saved successfully!');
+                } else {
+                    alert('Failed to capture and save image.');
+                }
+            });
+        });
     </script>
 </body>
 </html>

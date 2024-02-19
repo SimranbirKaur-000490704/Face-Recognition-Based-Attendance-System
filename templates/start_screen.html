@@ -17,17 +17,14 @@
 
         .container {
             width: 800px;
-            height: 100px;
+            height: 250px;
             background-color: #e0e0e0; /* Light pastel shade of grey */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
         }
 
-        .label {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+        
 
         .button-container {
             display: flex;
@@ -35,7 +32,8 @@
         }
 
         .button {
-            padding: 10px 20px;
+            width: 48%;
+            padding: 50px 80px; /* Adjust width here */
             background-color: #ffb74d; /* Light pastel shade of orange */
             color: white;
             border: none;
@@ -47,15 +45,27 @@
         .button:hover {
             background-color: #ff9800; /* Darker shade of orange on hover */
         }
+
+        .label {
+            font-size: 40px;
+            font-weight: bold; /* Make the text bold */
+            margin-bottom: 20px;
+            align-items: center;
+            color: rgb(9, 1, 248);
+            justify-content: center;
+            margin-bottom: 20px;
+        }
     </style>
+
+    
 </head>
 <body>
     <div class="container">
-        <h1 class="label">Welcome to Saskatchewan Polytechnic</h1>
+        <h1 class="label">Welcome to Saskatchewan Polytechnic </h1>
         <div class="button-container">
             <!-- Buttons inside the rectangle -->
-            <button onclick="registerButtonClicked('/register_screen')">Register</button>
-            <button onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
+            <button  class="button" onclick="registerButtonClicked('/register_screen')">Register</button>
+            <button  class="button" onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
         </div>
     </div>
 
