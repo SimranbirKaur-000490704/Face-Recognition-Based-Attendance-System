@@ -57,17 +57,18 @@
                 <img id="webcam-feed" src="/open-webcam" alt="Webcam Feed" width="100%" height="100%">
                 <!--video id="video" width="100%" height="100%" autoplay></video-->
             </div>
-            <button id="captureButton">Capture</button>
+            <!--button id="captureButton">Capture</button-->
         </div>
         <div class="right-half">
             <div id="registration form"  ></div>
                 <form id="myForm" width="100%" height="100%">
-                    <input type="text" name="Student id" placeholder="id" required>
-                    <input type="text" name="Name" placeholder="Name" required>
-                    <input type="text" name="email" placeholder="Email" required>
+                    <input type="text" name="Student Id" placeholder="id" pattern="\d+" required>
+                    <input type="text" name="Student Name" placeholder="Name"  pattern="[A-Za-z]+" required>
+                    <input type="email" name="email id" placeholder="Email" required>
                     <div class="button-container">
-                        <button type="submit" onclick="backButtonClicked() ">back</button>
-                        <button type="back" onclick="registrationButtonClicked('/')">Submit</button>
+                        <button type="back" onclick="backButtonClicked() ">back</button>
+                        <button id="submit">Submit</button>
+                        <!--button type="submit" onclick="registrationButtonClicked('/')">Submit</button-->
                     </div>
                 </form>
             </div>
@@ -76,60 +77,56 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const captureButton = document.getElementById('captureButton');
-            const webcamFeed = document.getElementById('webcam-feed');
-
-            captureButton.addEventListener('click', async () => {
+            document.getElementById('myForm').addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent form submission
+                
+                const formData = new FormData(event.target); // Get form data
+                
+                const captureButton = document.getElementById('captureButton');
+                const webcamFeed = document.getElementById('webcam-feed');
                 const canvas = document.createElement('canvas');
                 canvas.width = webcamFeed.width;
                 canvas.height = webcamFeed.height;
                 const context = canvas.getContext('2d');
                 context.drawImage(webcamFeed, 0, 0, canvas.width, canvas.height);
-
                 const dataURL = canvas.toDataURL('image/jpeg');
 
-                // Send dataURL to server to save the image
-                const response = await fetch('/save_image', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ image_data: dataURL })
+        
+                // Convert form data to object
+                const formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
                 });
 
-                if (response.ok) {
-                    alert('Image captured and saved successfully!');
-                } else {
-                    alert('Failed to capture and save image.');
+                // Create JSON object with image data and form data
+                const jsonData = {
+                    image_data: dataURL,
+                    form_data: formObject
+                };
+
+                try {
+                    // Send JSON data to server to save the image
+                    const response = await fetch('/save_image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonData)
+                    });
+
+                    if (response.ok) {
+                        alert('Image captured and data saved successfully!');
+                        //back button events, after successfully taking the pictures
+                       // event.preventDefault();
+                        //window.history.back();
+                    } else {
+                        alert('Failed to capture and save image.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing the request.');
                 }
             });
-        });
-    </script>
-    <script>
-        document.getElementById('myForm').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent form submission
-            const formData = new FormData(event.target); // Get form data
-
-            // Convert form data to object
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            // Send form data to server
-            const response = await fetch('/save_form_data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Form data saved successfully!');
-            } else {
-                alert('Failed to save form data.');
-            }
         });
     </script>
     <script>
