@@ -8,11 +8,16 @@ import cv2
 import numpy as np
 #import camera
 #print(cv2.__version__)
+#from tensorflow.keras.models import load_model
+
 
 app = Flask("FRAMS")
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
+
+# Load the saved model
+#loaded_model = load_model('FR_Model.h5')
 
 @app.route('/')
 def index():
@@ -31,6 +36,9 @@ def attendence_screen():
 def open_webcam():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/open-webcam1')
+def open_webcam1():
+    return Response(generate_frames1(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # Load your webcam capture script here
 def generate_frames():
@@ -50,14 +58,12 @@ def generate_frames():
 
     #save_image(cap)
     cap.release()
-
-
-# Destroy all the windows
+    # Destroy all the windows
     cv2.destroyAllWindows()
 
 
 # Load your webcam capture script here
-"""def generate_frames():
+def generate_frames1():
     cap = cv2.VideoCapture(0)
     while True:
         success, frame = cap.read()
@@ -78,8 +84,15 @@ def generate_frames():
             ret, buffer = cv2.imencode('.jpg', face)
             face = buffer.tobytes()
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + face + b'\r\n')"""
+                   b'Content-Type: image/jpeg\r\n\r\n' + face + b'\r\n')
+       
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
+    #save_image(cap)
+    cap.release()
+    # Destroy all the windows
+    cv2.destroyAllWindows()
 
 # Open the webcam window
 """def open_webcam1():
@@ -163,6 +176,10 @@ def save_image(image_data, form_data):
     image_path = os.path.join(directory, image_filename)
     cv2.imwrite(image_path, cropped_image)
 
+    save_label_to_csv(image_path, id)
+
+    print(f"Image saved to: {image_path}")
+
     #image_path = os.path.join(directory, f'{image_id}.jpg')
     #cv2.imwrite(image_path, cropped_image)
 
@@ -170,6 +187,26 @@ def save_image(image_data, form_data):
    # image_path = os.path.join('images', f'{image_id}.jpg')
     #cv2.imwrite(image_path, cropped_image)
 
+# Load image paths and corresponding labels from CSV file
+def load_data(csv_file):
+    X = []
+    y = []
+    with open(csv_file, 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            image_path, label = row
+            # Read image and preprocess it
+            image = cv2.imread(image_path)
+            #image = preprocess_image(image)  # Implement preprocess_image function as needed
+            X.append(image)
+            y.append(label)
+    return np.array(X), np.array(y)
+
+# Function to save the image path and label to a CSV file
+def save_label_to_csv(image_path, student_id):
+    csv_file = 'labels.csv'
+    with open(csv_file, 'a') as file:
+        file.write(f"{image_path},{student_id}\n")
 
 #Function to detect face and crop the image, resize it and return
 def image_cleaning_resizing(image):
@@ -207,6 +244,22 @@ def image_cleaning_resizing(image):
         face_resized = cv2.resize(face, target_size)
 
         return face_resized
+    
+    # Crop and return the first detected face(this logic can be used instaed of the above logic)
+    """if len(faces) > 0:
+        x, y, w, h = faces[0]
+        # Crop the detected face with a small margin
+        margin = 0.2
+        x_margin = int(w * margin)
+        y_margin = int(h * margin)
+        face = image[max(0, y - y_margin):min(y + h + y_margin, image.shape[0]),
+                     max(0, x - x_margin):min(x + w + x_margin, image.shape[1])]
+        # Resize the cropped face to a standard size
+        target_size = (250, 250)
+        face_resized = cv2.resize(face, target_size)
+        return face_resized
+    else:
+        return None"""
 
 #Saving the form data 
 def save_form_data(form_data):
@@ -244,7 +297,6 @@ def save_form_data(form_data):
 
     return 'Form data saved successfully!', 200
 
-    
 # This can be deleted , Function to generate a unique ID for each image
 def generate_unique_id():
     return str(uuid.uuid4())

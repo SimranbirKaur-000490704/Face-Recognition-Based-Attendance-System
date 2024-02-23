@@ -71,15 +71,17 @@
             <img id="webcam-feed" src="/open-webcam" alt="Webcam Feed" width="50%" height="50%">
             </div>
             <!-- Button to take attendance -->
-            <button  id="submit" class="button">Submit</button>
+            <button id="submit" class="button">Submit</button>
         </div>
     </div>
     <!--script>
-        function submitButtonclicked() {
+        function startWebcam(url) {
+            window.location.href = url;
+
             // Add code here to start webcam
-            window.alert('Its a match! Your attendence is submitted');
-            event.preventDefault();
-            window.history.back();
+           // window.alert('Its a match! Your attendence is submitted');
+           // event.preventDefault();
+            //window.history.back();
         }
     </script-->
     <script>
@@ -96,19 +98,32 @@
 
                 const dataURL = canvas.toDataURL('image/jpeg');
 
-                // Send dataURL to server to save the image
-                const response = await fetch('/save_image', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ image_data: dataURL })
-                });
+                // Create JSON object with image data and form data
+                const jsonData = {
+                    image_data: dataURL,
+                };
 
-                if (response.ok) {
-                    alert('Image captured and saved successfully!');
-                } else {
-                    alert('Failed to capture and save image.');
+                try {
+                    // Send JSON data to server to save the image
+                    const response = await fetch('/save_image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonData)
+                    });
+
+                    if (response.ok) {
+                        alert('Image captured and data saved successfully!');
+                        //back button events, after successfully taking the pictures
+                       // event.preventDefault();
+                        //window.history.back();
+                    } else {
+                        alert('Failed to capture and save image.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing the request.');
                 }
             });
         });
