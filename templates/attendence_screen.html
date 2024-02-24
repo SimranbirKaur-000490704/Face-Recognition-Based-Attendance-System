@@ -68,7 +68,7 @@
             <h2 class="label">Ready, and Click!</h2>
 
             <div  id="video-container" class="video-container" >
-            <img id="webcam-feed" src="/open-webcam" alt="Webcam Feed" width="50%" height="50%">
+            <img id="webcam-feed" src="/open-webcam1" alt="Webcam Feed" width="50%" height="50%">
             </div>
             <!-- Button to take attendance -->
             <button id="submit" class="button">Submit</button>
@@ -105,7 +105,7 @@
 
                 try {
                     // Send JSON data to server to save the image
-                    const response = await fetch('/save_image', {
+                    const response = await fetch('/save_attendence', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
