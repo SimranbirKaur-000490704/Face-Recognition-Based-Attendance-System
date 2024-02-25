@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome Page</title>
+        <title>Welcome to Saskatchewan Polytechnic</title> <!-- Set the title of the page here -->
         <style>
             body {
                 margin: 0;
@@ -16,13 +16,19 @@
             }
     
             .container {
-                width: 80%;
-                max-width: 400px; /* Adjusted width for better responsiveness */
+                width: 140%;
+                max-width: 500px; /* Adjusted width for better responsiveness */
+                height: 100vh; /* 100% of the viewport height */
+                max-height: 400px;
                 background-color: #e0e0e0; /* Light pastel shade of grey */
                 padding: 20px;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
                 text-align: center; /* Center text */
+                display: flex;
+                flex-direction: column;
+                justify-content: center; /* Center vertically */
+                align-items: auto; /* Center horizontally */
             }
     
             .label {
@@ -35,30 +41,44 @@
             .button-container {
                 display: flex;
                 flex-direction: column; /* Buttons in a column layout */
-                gap: 15px; /* Spacing between buttons */
+                gap: 70px; /* Spacing between buttons */
+                align-items: center; /* Center buttons horizontally */
+                justify-content: center; /* Center buttons vertically */
             }
     
             .button {
-                width: 100%;
-                padding: 10px; /* Adjusted button padding */
+                width: 200%; /* Adjusted button width */
+                max-width: 375px; /* Maximum width for responsiveness */
+                margin: auto; /* Center align horizontally */
+                padding: 20px; /* Adjusted button padding */
                 background-color: #2ecc71; /* Light pastel shade of blue */
+                font-style: normal;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: bold;
                 color: white;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                font-size: 14px; /* Reduced font size */
+                font-size: 40px; /* Adjusted font size */
                 transition: background-color 0.3s ease-in-out;
+                align-items: center;
             }
     
             .button:hover {
                 background-color: #27ae60; /* Darker shade of blue on hover */
             }
+    
+            .image {
+                margin-right: 10px; /* Adjust the margin to move the image to the left */
+                max-width: 100%; /* Ensure the image does not exceed its container */
+                border-radius: 50%; /* Make the image circular */
+            }
         </style>
     </head>
 <body>
-    <img src="Sasklogo.jpg">
+    <img src="https://i.ibb.co/pdQf7xb/Sasklogo.jpg" alt="Sasklogo" border="0">
+    <!--<h1 class="label" >Welcome to Saskatchewan Polytechnic </h1>-->
     <div class="container">
-            <h1 class="label">Welcome to Saskatchewan Polytechnic </h1>
             <div class="button-container">
                 <!-- Buttons inside the rectangle -->
                 <button  class="button" onclick="registerButtonClicked('/register_screen')">Register</button>
