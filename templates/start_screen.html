@@ -1,72 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Page</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* Make the page fill the entire viewport height */
-            background-color: #f5f5f5; /* Light pastel shade of grey */
-        }
-
-        .container {
-            width: 800px;
-            height: 250px;
-            background-color: #e0e0e0; /* Light pastel shade of grey */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
-        }
-
-        
-
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .button {
-            width: 48%;
-            padding: 50px 80px; /* Adjust width here */
-            background-color: #ffb74d; /* Light pastel shade of orange */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button:hover {
-            background-color: #ff9800; /* Darker shade of orange on hover */
-        }
-
-        .label {
-            font-size: 40px;
-            font-weight: bold; /* Make the text bold */
-            margin-bottom: 20px;
-            align-items: center;
-            color: rgb(9, 1, 248);
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-    </style>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome Page</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh; /* Make the page fill the entire viewport height */
+                background-color: #ffffff; /* Light pastel shade of grey */
+            }
     
-</head>
+            .container {
+                width: 80%;
+                max-width: 400px; /* Adjusted width for better responsiveness */
+                background-color: #e0e0e0; /* Light pastel shade of grey */
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+                text-align: center; /* Center text */
+            }
+    
+            .label {
+                font-size: 24px;
+                font-weight: bold; /* Make the text bold */
+                margin-bottom: 20px;
+                color: #333; /* Dark grey text color */
+            }
+    
+            .button-container {
+                display: flex;
+                flex-direction: column; /* Buttons in a column layout */
+                gap: 15px; /* Spacing between buttons */
+            }
+    
+            .button {
+                width: 100%;
+                padding: 10px; /* Adjusted button padding */
+                background-color: #2ecc71; /* Light pastel shade of blue */
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px; /* Reduced font size */
+                transition: background-color 0.3s ease-in-out;
+            }
+    
+            .button:hover {
+                background-color: #27ae60; /* Darker shade of blue on hover */
+            }
+        </style>
+    </head>
 <body>
+    <img src="Sasklogo.jpg">
     <div class="container">
-        <h1 class="label">Welcome to Saskatchewan Polytechnic </h1>
-        <div class="button-container">
-            <!-- Buttons inside the rectangle -->
-            <button  class="button" onclick="registerButtonClicked('/register_screen')">Register</button>
-            <button  class="button" onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
-        </div>
+            <h1 class="label">Welcome to Saskatchewan Polytechnic </h1>
+            <div class="button-container">
+                <!-- Buttons inside the rectangle -->
+                <button  class="button" onclick="registerButtonClicked('/register_screen')">Register</button>
+                <button  class="button" onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
+            </div>
     </div>
 
     <script>
