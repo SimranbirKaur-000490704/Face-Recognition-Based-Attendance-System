@@ -448,6 +448,7 @@ def handle_save_attendence():
 
 #Saving the form data 
 def save_form_data(form_data):
+    print("save_form_data")
     csv_file_path = 'form_data.csv'
     record_exists = False
 
@@ -472,12 +473,16 @@ def save_form_data(form_data):
 
         writer.writeheader()
 
+        # Write all existing records except the one being updated
         for record in existing_records:
             if record['Student Id'] != form_data['Student Id']:
                 writer.writerow(record)
 
         # Write the updated record if it exists
         if record_exists:
+            writer.writerow(form_data)
+        # Write a new record if it doesn't exist
+        else:
             writer.writerow(form_data)
 
     return 'Form data saved successfully!', 200
