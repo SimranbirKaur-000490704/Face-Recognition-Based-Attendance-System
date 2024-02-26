@@ -9,7 +9,7 @@ import numpy as np
 import datetime
 
 #import camera
-#print(cv2.__version__)
+#print(cv2._version_)
 #from tensorflow.keras.models import load_model
 
 
@@ -197,7 +197,6 @@ def generate_frames1():
 
 #This method is used to find name of student from csv file for a student id
 def find_names(id):
-
     print("id in find names",id)
     with open('form_data.csv', 'r', newline='') as file:
         reader = csv.DictReader(file)
@@ -205,6 +204,8 @@ def find_names(id):
             if row['Student Id'] == id:
                 name = row['Student Name']
                 print("id in find names",name)
+                #names.append(name)
+    
                 return name
             
 # Open the webcam window
@@ -245,9 +246,6 @@ def handle_save_image():
 
         #Calling Save_image function , send image data and form data to fetch name and id to label the image data
         save_image(image_data, form_data)
-
-        #Calling save_form_data to save the form details
-        save_form_data(form_data)
 
         return 'Image saved successfully!', 200
 
@@ -292,6 +290,10 @@ def save_image(image_data, form_data):
     save_label_to_csv(image_path, id)
 
     print(f"Image saved to: {image_path}")
+
+
+    #Calling save_form_data to save the form details
+    save_form_data(form_data)
 
     #image_path = os.path.join(directory, f'{image_id}.jpg')
     #cv2.imwrite(image_path, cropped_image)
@@ -399,15 +401,13 @@ def handle_save_attendence():
             #cv2.rectangle(img, (x, y), (x+w, y+h), (0, 110, 0), 2)
 
             id, confidence = recognizer.predict(gray[y:y+h,x:x+w])
-            if(id):
-                name = find_names(str(id))
-            else:
-                name = "unknown"
-
+            
             # Check if confidence is less them 100 ==> "0" is perfect match 
             if (confidence < 100):
                 #name = find_names(str(id))
                 confidence = "  {0}%".format(round(100 - confidence))
+                name = find_names(str(id))
+            
             else:
                # name = "unknown"
                 confidence = "  {0}%".format(round(100 - confidence))
@@ -484,6 +484,8 @@ def save_form_data(form_data):
         # Write a new record if it doesn't exist
         else:
             writer.writerow(form_data)
+    
+    print("saved")
 
     return 'Form data saved successfully!', 200
 
@@ -493,6 +495,3 @@ def generate_unique_id():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-    
-    
