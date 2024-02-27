@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Saskatchewan Polytechnic</title> <!-- Set the title of the page here -->
         <style>
             body {
                 margin: 0;
@@ -11,78 +10,118 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100vh; /* Make the page fill the entire viewport height */
-                background-color: #ffffff; /* Light pastel shade of grey */
+                height: 100vh;
+                background-color: #ffffff;
             }
     
             .container {
-                width: 140%;
-                max-width: 500px; /* Adjusted width for better responsiveness */
-                height: 100vh; /* 100% of the viewport height */
-                max-height: 400px;
-                background-color: #e0e0e0; /* Light pastel shade of grey */
+                width: 200%;
+                max-width: 600px;
+                height: 200vh;
+                max-height: 580px;
+                background-color: #e0e0e0;
                 padding: 20px;
                 border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
-                text-align: center; /* Center text */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: center;
                 display: flex;
-                flex-direction: column;
-                justify-content: center; /* Center vertically */
-                align-items: auto; /* Center horizontally */
+                flex-direction: column ;
+                justify-content: center;
+                align-items: center;
+                position: fixed; right: 45px;
             }
     
             .label {
-                font-size: 24px;
-                font-weight: bold; /* Make the text bold */
-                margin-bottom: 20px;
-                color: #333; /* Dark grey text color */
+                font-size: 45px;
+                word-wrap: break-word; 
+                font-weight: bolder;
+                position: fixed;
+                color: #333;
+                max-width: 550px;
+                margin-bottom: 15%;
+                font-style: normal;
+                font-family: Cambria;
+
             }
     
             .button-container {
                 display: flex;
-                flex-direction: column; /* Buttons in a column layout */
-                gap: 70px; /* Spacing between buttons */
-                align-items: center; /* Center buttons horizontally */
-                justify-content: center; /* Center buttons vertically */
+                flex-direction: column;
+                gap: 40px;
+                align-items: bottom;
             }
     
             .button {
-                width: 200%; /* Adjusted button width */
-                max-width: 375px; /* Maximum width for responsiveness */
-                margin: auto; /* Center align horizontally */
-                padding: 20px; /* Adjusted button padding */
-                background-color: #2ecc71; /* Light pastel shade of blue */
+                flex: 2;
+                width: 220%;
+                max-width: 500px;
+                padding: 16px;
+                align-self: center;
+                background-color: #2ecc71;
                 font-style: normal;
-                font-family: 'Times New Roman', Times, serif;
+                font-family: Cambria;
                 font-weight: bold;
                 color: white;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                font-size: 40px; /* Adjusted font size */
-                transition: background-color 0.3s ease-in-out;
-                align-items: center;
+                font-size: 30px;
+                transition: background-color 0.2s ease-in-out;
+                transition: transform 0.2s ease-in;
             }
     
             .button:hover {
-                background-color: #27ae60; /* Darker shade of blue on hover */
+                background-color: #27ae60;
+                transform: scale(1.1);
             }
     
             .image {
-                margin-right: 10px; /* Adjust the margin to move the image to the left */
-                max-width: 100%; /* Ensure the image does not exceed its container */
-                border-radius: 50%; /* Make the image circular */
+                border-radius: 0%;
+                filter: grayscale(0%);
+                transition: transform 0.2s ease-in-out;
+                position: fixed; left: 70px;
+            }
+
+            .image:hover {
+                transform: scale(1.1);
+            }
+            
+            .attendance-button {
+                max-width: 500px;
+                flex: 2;
+                width: 220%;
+                align-self: center;
+                padding: 16px;
+                background-color: #2ecc71;
+                font-style: normal;
+                font-family: Cambria;
+                font-weight: bold;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 30px;
+                transition: background-color 0.2s ease-in-out;
+                transition: transform 0.2s ease-in;
+            }
+
+            .attendance-button:hover {
+                background-color: #27ae60;
+                transform: scale(1.1);
             }
         </style>
     </head>
 <body>
-    <img src="https://i.ibb.co/pdQf7xb/Sasklogo.jpg" alt="Sasklogo" border="0">
-    <!--<h1 class="label" >Welcome to Saskatchewan Polytechnic </h1>-->
+    <img src="https://i.ibb.co/jVk9pqc/Saskatchewan-Polytechnic-logo.jpg" width="700" height="350"
+            alt="Saskatchewan-Polytechnic-logo" border="0" class="image">
     <div class="container">
+            <label class="label">Facial Recognition Attendence Management System</label>
             <div class="button-container">
                 <!-- Buttons inside the rectangle -->
-                <button  class="button" onclick="registerButtonClicked('/register_screen')">Register</button>
-                <button  class="button" onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
+                <button  class="button" style="position: relative; top: 100%" 
+                    onclick="registerButtonClicked('/register_screen')">Register</button>
+                <button  class="attendance-button" style="position: relative; top: 100%" 
+                    onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
             </div>
     </div>
 

@@ -22,9 +22,10 @@
             .container {
                 display: flex;
                 flex-wrap: wrap;
-                width: 130%;
-                max-width: 800px;
-                margin: 0 auto;
+                width: 200%;
+                max-width: 1250px;
+                height: 100%;
+                max-height: 490px;
                 background-color: #fff;
                 border-radius: 10px;
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -32,11 +33,10 @@
             }
     
             .left-half {
-                flex: 2;
+                flex: 1.5;
                 background-color: #f9f9f9;
                 color: white;
                 font-size: 24px;
-                padding: 20px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -60,8 +60,10 @@
             form {
                 border: 1px solid #ddd;
                 padding: 20px;
-                max-width: 400px;
+                max-width: 420px;
                 width: 100%;
+                height: 100%;
+                max-height: 400px;
                 background-color: #f9f9f9; /* Light gray background */
                 border-radius: 8px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -107,8 +109,10 @@
     
             .button-container {
                 display: flex;
-                justify-content: space-between;
-                margin-top: 20px;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+                margin-top: 80px;
             }
     
             button {
@@ -164,7 +168,7 @@
                     <label for="email">Email ID</label>
                     <input type="email" name="email id" placeholder="Email" required>
                     <div class="button-container">
-                        <button type="back" onclick="backButtonClicked() ">back</button>
+                        <button type="back" onclick="backButtonClicked() ">Back</button>
                         <button id="submit">Submit</button>
                         <!--button type="submit" onclick="registrationButtonClicked('/')">Submit</button-->
                     </div>
