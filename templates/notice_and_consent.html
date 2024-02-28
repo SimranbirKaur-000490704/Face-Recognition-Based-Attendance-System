@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice and Consent</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .notice-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .agree-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .agree-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Notice and Consent</h2>
+        <p class="notice-text">
+            By proceeding, you consent to the use of your image for the purpose of capturing and documenting moments during the Registration. These images may be used in marking your attendances for the courses you are enrolled in.
+
+            We respect your privacy, and we assure you that your image will be used responsibly. The sole use of these images is for taking attendance. If you have any concerns or objections, please refrain from proceeding, and inform your professir about your concern.
+
+            By clicking the "Agree to Terms" button, you acknowledge that you have read and understood the terms outlined above and grant permission for the use of your image as described.
+        </p>
+        <button class="agree-button" onclick="redirectToNextPage()">Agree to Terms</button>
+    </div>
+
+    <script>
+        function redirectToNextPage() {
+            alert('Thank you for agreeing to the terms. You will now be redirected to the next page.');
+            // window.location.href = 'next-page.html'; // Uncomment this line to enable redirection
+        }
+    </script>
+</body>
+
+</html>
