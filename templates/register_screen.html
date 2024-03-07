@@ -28,13 +28,13 @@
                 max-height: 490px;
                 background-color: #fff;
                 border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 overflow: hidden;
             }
     
             .left-half {
                 flex: 1.5;
-                background-color: #f9f9f9;
+                background-color: #edeaea;
                 color: white;
                 font-size: 24px;
                 display: flex;
@@ -59,14 +59,14 @@
     
             form {
                 border: 1px solid #ddd;
-                padding: 20px;
+                padding: 30px;
                 max-width: 420px;
                 width: 100%;
                 height: 100%;
                 max-height: 400px;
-                background-color: #f9f9f9; /* Light gray background */
+                background-color: #edeaea; /* Light gray background */
                 border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 transition: background-color 0.3s ease-in-out;
             }
     
@@ -84,17 +84,20 @@
                 font-weight: bold;
                 margin-bottom: 5px;
                 color: #333;
+                font-family: Cambria;
+                letter-spacing: 0.5px;
             }
     
             input,
             select,
             textarea {
                 padding: 10px;
-                margin: 5px 0;
+                margin: 10px 0;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 width: 100%;
                 transition: border-color 0.3s ease-in-out;
+                letter-spacing: 0.5px;
             }
     
             input:focus,
@@ -112,22 +115,24 @@
                 flex-direction: row;
                 justify-content: space-evenly;
                 align-items: center;
-                margin-top: 80px;
+                margin-top: 40px;
             }
     
             button {
-                background-color: #2ecc71;
+                background-color: #763B97;
                 color: white;
                 border: none;
                 padding: 10px 20px;
                 cursor: pointer;
                 border-radius: 5px;
-                font-size: 16px;
+                font-size: 17px;
+                font-family: Cambria;
+                font-weight: bold;
                 transition: background-color 0.3s ease-in-out;
             }
     
             button:hover {
-                background-color: #27ae60; /* Darker shade on hover */
+                background-color: #954dc2; /* Darker shade on hover */
             }
     
             h1 {
@@ -162,11 +167,11 @@
             <div id="registration form"  ></div>
                 <form id="myForm" width="100%" height="100%">
                     <label for="studentId">Student ID</label>
-                    <input type="text" name="Student Id" placeholder="id" pattern="\d+" required>
+                    <input type="text" name="Student Id" placeholder="Enter you Student ID here" pattern="\d+" required>
                     <label for="studentName">Student Name</label>
-                    <input type="text" name="Student Name" placeholder="Name"  pattern="[A-Za-z]+" required>
+                    <input type="text" name="Student Name" placeholder="Enter you First Name"  pattern="[A-Za-z]+" required>
                     <label for="email">Email ID</label>
-                    <input type="email" name="email id" placeholder="Email" required>
+                    <input type="email" name="email id" placeholder="Enter you Saskpolytech Email" required>
                     <div class="button-container">
                         <button type="back" onclick="backButtonClicked() ">Back</button>
                         <button id="submit">Submit</button>
