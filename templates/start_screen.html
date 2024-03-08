@@ -11,17 +11,17 @@
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
-                background-color: #ffffff;
+                background-color: #f8f8f8;
             }
     
             .container {
                 width: 200%;
-                max-width: 600px;
+                max-width: 580px;
                 height: 200vh;
                 max-height: 580px;
                 background-color: #f0eded;
                 padding: 20px;
-                border-radius: 10px;
+                border-radius: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 text-align: center;
                 display: flex;
@@ -29,7 +29,7 @@
                 justify-content: center;
                 align-items: center;
                 position: fixed;
-                right: 45px;
+                right: 60px;
                 overflow: hidden;
                 transition: box-shadow 0.3s ease-in-out;
             }
@@ -64,8 +64,8 @@
                 max-width: 550px;
                 margin-bottom: 15%;
                 font-style: normal;
-                font-family: 'Segoe UI';
-                transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+                font-family: 'Cambria';
+                transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
             }
 
@@ -73,9 +73,9 @@
                 color: #FF5733; /* Change to a different color on hover */
                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle text shadow on hover */
                 color: #000000; /* Ensure proper text color for contrast */
-                opacity: 0.8; /* Reduce opacity on hover for a subtle effect */
-                letter-spacing: 2px; /* Increase letter spacing on hover */
-                transform: scale(1.02);
+                opacity: 0.7; /* Reduce opacity on hover for a subtle effect */
+                letter-spacing: 3px; /* Increase letter spacing on hover */
+                transform: scale(1.04);
             }
     
             .button-container {
@@ -93,7 +93,7 @@
                 align-self: center;
                 background-color: #763B97;
                 font-style: normal;
-                font-family: 'Segoe UI';
+                font-family: 'Cambria';
                 font-weight: bold;
                 color: white;
                 border: none;
@@ -114,20 +114,19 @@
                 display: inline-block;
             }
 
-            
             .image {
                 position: relative; left: -345px;
                 object-fit: cover;
                 display: block;
                 margin-top: -10px;
-                box-shadow: 10px 15px 25px 0 rgba(0, 0, 0, .2);
-                transition: filter 0.25s ease-in-out, transform 0.2s ease-in-out;
-
+                border-radius: 25px;
+                box-shadow: 10px 15px 25px 0 rgba(0, 0, 0, .3);
+                transition: filter 0.25s ease-in-out, transform 0.25s ease-in-out;
             }
 
             .image-container:hover .image {
                 filter: grayscale(150%) contrast(150%);
-                transform: scale(1.04);
+                transform: scale(1.05);
             }
 
             .glow-wrap {
@@ -184,7 +183,7 @@
     </head>
 <body>
     <div class="image-container">
-    <img src="https://i.ibb.co/jVk9pqc/Saskatchewan-Polytechnic-logo.jpg" width="700" height="350"
+    <img src="https://i.ibb.co/jVk9pqc/Saskatchewan-Polytechnic-logo.jpg" width="720" height="360"
             alt="Saskatchewan-Polytechnic-logo" border="0" class="image">
             <div class="glow-wrap">
                 <div class="glow"></div>

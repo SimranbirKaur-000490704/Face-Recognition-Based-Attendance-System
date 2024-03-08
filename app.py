@@ -53,17 +53,19 @@ def generate_frames():
         if not success:
             break
         else:
+            # Flip the frame horizontally
+            frame = cv2.flip(frame, 1)  # 1 for horizontal flip, 0 for vertical flip, -1 for both
+
+            # Encode frame to JPEG format
             ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
+            frame_encoded = buffer.tobytes()
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame_encoded + b'\r\n')
             
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    #save_image(cap)
     cap.release()
-    # Destroy all the windows
     cv2.destroyAllWindows()
 
 """def generate_frames1():
@@ -151,38 +153,37 @@ def generate_frames():
     
 # Load your webcam capture script here : original code 
 def generate_frames1():
-    # Load the pre-trained Haar Cascade classifier for face detection    
     cap = cv2.VideoCapture(0)
     while True:
         success, frame = cap.read()
         if not success:
             break
         else:
+            # Flip the frame horizontally
+            frame = cv2.flip(frame, 1)  # 1 for horizontal flip, 0 for vertical flip, -1 for both
+
             # Convert the frame to grayscale for face detection
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             
             # Detect faces in the frame
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
             
-
             # Draw rectangles around the detected faces
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 110, 0), 2)
 
                 id, confidence = recognizer.predict(gray[y:y+h,x:x+w])
-
-                # Check if confidence is less them 100 ==> "0" is perfect match 
-                if (confidence < 100):
+                
+                # Check if confidence is less than 100 ==> "0" is perfect match 
+                if confidence < 100:
                     id = find_names(str(id))
                     confidence = "  {0}%".format(round(100 - confidence))
                 else:
                     id = "unknown"
                     confidence = "  {0}%".format(round(100 - confidence))
-        
-                cv2.putText(frame, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
-                #cv2.putText(frame, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1)
-
             
+                cv2.putText(frame, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
+
             # Encode frame to JPEG format
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_encoded = buffer.tobytes()
