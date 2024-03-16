@@ -1,0 +1,8 @@
+runtime: python39
+
+handlers:
+- url: /templates
+  static_dir: templates
+
+- url: /.*
+  script: app.py
