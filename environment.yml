@@ -1,6 +1,6 @@
 name: Frams #Environment name
 dependencies:
-  - python=3.11.4
+  - python=3.10.11
   - pip
   - numpy
   - pandas
