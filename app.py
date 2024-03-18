@@ -347,8 +347,5 @@ def save_form_data(form_data):
 def generate_unique_id():
     return str(uuid.uuid4())
 
-# Set the port to the PORT environment variable or default to 8000
-port = int(os.environ.get('PORT', 8000))
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
