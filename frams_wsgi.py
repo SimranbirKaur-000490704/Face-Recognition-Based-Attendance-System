@@ -1,0 +1,1 @@
+from app import FRAMS as application
