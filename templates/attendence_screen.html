@@ -112,6 +112,8 @@
             </div>
             <!-- Button to take attendance -->
             <button id="submit" class="button">Mark Attendance</button>
+            <!-- Added new -->
+            <label id="responseLabel" /> 
         </div>
     </div>
     <!--script>
@@ -161,15 +163,27 @@
                         },
                         body: JSON.stringify(jsonData)
                     });
+                    const responseData = await response.json();
+                    
+                    // Access and display the name if available in the response
+                    if (responseData.name) {
+                        //const responseLabel = document.getElementById('responseLabel');
+                        responseLabel.innerText = `Name: ${responseData.name}`;
+                        alert(`${responseData.name}'s attendence has been saved!`);
 
-                    if (response.ok) {
+                    } else {
+                       // const responseLabel = document.getElementById('responseLabel');
+                        responseLabel.innerText = '';
+                    }
+
+                    /*if (response.ok) {
                         alert('Image captured and data saved successfully!');
                         //back button events, after successfully taking the pictures
                        // event.preventDefault();
                         //window.history.back();
                     } else {
                         alert('Failed to capture and save image.');
-                    }
+                    }*/
                 } catch (error) {
                     console.error('Error:', error);
                     alert('An error occurred while processing the request.');

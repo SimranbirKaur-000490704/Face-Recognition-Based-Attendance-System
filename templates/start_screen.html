@@ -156,6 +156,7 @@
                     onclick="registerButtonClicked('/register_screen')">Register</button>
                 <button  class="attendance-button" 
                     onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
+                <button  class="button" onclick="checkAttendence('/check_attendence')">Check attendence</button>
             </div>
     </div>
     <script>
@@ -176,6 +177,11 @@
         function attendencebuttonClicked(url) {
             window.location.href = url;
             
+        }
+    </script>
+    <script>
+        function checkAttendence(url) {
+            window.location.href = url;
         }
     </script>
 </body>
