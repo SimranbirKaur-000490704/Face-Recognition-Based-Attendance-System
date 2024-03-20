@@ -175,7 +175,7 @@
 
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Please check proper lighting and distance from the camera, Try again!');
+                    alert('Please check the lighting and distance from the camera, Try again!');
                 }
             });
         });
@@ -187,7 +187,7 @@
                 // If user clicks "Yes"
                 console.log("User clicked Yes.");
                 //If user clicks yes, show name label on the picture!
-                responseLabel.innerText = `${name}`;
+                responseLabel.innerText = `Hi ${name}`;
                 //Call method for saving data to csv
                 saveAttendance(name, id)
 
@@ -211,16 +211,14 @@
                 body: JSON.stringify(jsonData)
             });
             const responseData = await response.json();
-            // Process responseData as needed
 
-            if(response.ok){
-                console.log("Attendence in csv has been saved!");
-                alert('Attendence has been saved');
+            if(responseData){
+                console.log(`${responseData.message}`);
+                alert(`${responseData.message}`);
 
             }else{
                 alert('Please try again!');
-            }
-            
+            }  
         }
 
     </script>

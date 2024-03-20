@@ -1,9 +1,7 @@
 import base64
 import csv
-import time
 from flask import Flask, jsonify, render_template, Response, request
 import os
-import uuid
 import cv2
 import joblib
 import numpy as np
@@ -673,7 +671,7 @@ def save_attendence_in_csv():
         print("json data not none")
         name = json_data.get("name")  # Accessing image_data from jsonData
         id = json_data.get("id")   # Remove 'data:image/jpeg;base64,' prefix
-        
+
         # Get the current date and time
         current_datetime = datetime.datetime.now()
 
@@ -682,24 +680,49 @@ def save_attendence_in_csv():
 
         date = current_datetime.strftime("%Y-%m-%d")
         time = current_datetime.strftime("%H:%M:%S")
-        # Write data to CSV file
 
-        with open('attendence.csv', 'a', newline='') as csvfile:
-            fieldnames = ['id', 'name', 'date', 'time']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        # Check if the attendance entry already exists
+        if is_attendence_saved(id, name, date):
+            print("Attendence for", name, "on", date, "is already saved.")
 
-            # Write header if the file is empty
-            if csvfile.tell() == 0:
-                writer.writeheader()
+            response_data = {
+                'message': 'Your Attendence is already saved.'
+            }
+        else:
+            with open('attendence.csv', 'a', newline='') as csvfile:
+                fieldnames = ['id', 'name', 'date', 'time']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-            # Write data
-            writer.writerow({'id': id, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)
+                # Write header if the file is empty
+                if csvfile.tell() == 0:
+                    writer.writeheader()
 
+                # Write data
+                writer.writerow({'id': id, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)"""
 
-        return "OK", 200
+            response_data = {
+                'message': 'Attendence saved successfully!',
+            }
+
+        # Return the response as JSON
+        return jsonify(response_data), 200
+    
     else:
         print("response is 400")
         return "Invalid request", 400
+
+
+def is_attendence_saved(id, name, date):
+    try:
+        with open('attendence.csv', 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if row[0] == id and row[1] == name and row[2] == date:
+                    return True
+                
+    except FileNotFoundError:
+        return False  # Return False if the file doesn't exist
+    return False
 
 #Saving the form data 
 def save_form_data(form_data):
@@ -743,10 +766,6 @@ def save_form_data(form_data):
     print("saved")
 
     return 'Form data saved successfully!', 200
-
-# This can be deleted , Function to generate a unique ID for each image
-def generate_unique_id():
-    return str(uuid.uuid4())
 
 if __name__ == '__main__':
     app.run(debug=True)
