@@ -72,6 +72,9 @@ def generate_frames():
         if not success:
             break
         else:
+            # Flip the frame horizontally
+            frame = cv2.flip(frame, 1)  # 1 for horizontal flip, 0 for vertical flip, -1 for both
+
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
@@ -92,6 +95,8 @@ def generate_frames1():
         if not success:
             break
         else:
+             # Flip the frame horizontally
+            frame = cv2.flip(frame, 1)  # 1 for horizontal flip, 0 for vertical flip, -1 for both
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
 
