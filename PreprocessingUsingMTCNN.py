@@ -34,8 +34,8 @@ def image_cleaning_resizing(image1):
         resized_face = cv2.resize(cropped_face, (250, 250))
 
         #Creating label for the image
-        id = "490704"
-        name = "Simranbir"
+        id = "3333335"
+        name = "Supreet"
         image_id =  id+"_"+name
 
         #Creating a directory with person's name
@@ -56,7 +56,7 @@ def image_cleaning_resizing(image1):
         cv2.imwrite(image_path, resized_face)
 
 
-folder_path ="extra_images/Rishikesh"
+folder_path ="extra_images"
 for filename in os.listdir(folder_path):
     # Check if the file is an image
     if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):

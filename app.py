@@ -550,8 +550,8 @@ def handle_save_attendence():
         #image = cv2.imread(new_img)
         #   gray = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         #
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        gray = cv2.cvtColor(gray, cv2.COLOR_RGB2GRAY)
+        image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
         # Check the shape of the image
         if len(gray.shape) == 3:
@@ -572,7 +572,7 @@ def handle_save_attendence():
             margin = 0.2
             x_margin = int(w * margin)
             y_margin = int(h * margin)
-            face_gray = gray[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
+            face_gray = img[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
             #face_gray = gray[y:y+h, x:x+w]
             #cv2.rectangle(gray, (x, y), (x + w, y + h), (0, 255, 0), 4)
             #cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
@@ -584,8 +584,11 @@ def handle_save_attendence():
             
            
             # Expand dimensions to make a batch of size 1 (required by the model)
-            face_batch = np.expand_dims(face_resized, axis=0)
+            face_batch = np.expand_dims(face_resized, axis=0) #commented out
             #face_batch = np.expand_dims(face_batch, axis=3)  # Add channel dimension
+            
+            print("face shape",face_resized.shape)
+            #print("face batch",face_batch)
 
             # Initialize LabelEncoder
             le = joblib.load('label_encoder.pkl')

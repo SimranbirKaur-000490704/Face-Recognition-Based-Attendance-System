@@ -35,7 +35,7 @@ class FaceRecognitionCNN:
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
                     image_path = os.path.join(root, file)
                     img = cv2.imread(image_path)
-                    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                     img = cv2.resize(img, (250, 250))  # Resize image to 100x100
                     #img = cv2.resize(img, (96, 96))  # Resize image to 100x100
                     #img = np.expand_dims(img, axis=-1)  # Add channel dimension
@@ -66,7 +66,7 @@ class FaceRecognitionCNN:
         self.num_classes = len(le.classes_)
         print("num cLasses",self.num_classes)
         images = np.array(images)
-        images = images.reshape(images.shape[0], images.shape[1], images.shape[2], 1)  # Add channel dimension
+        #images = images.reshape(images.shape[0], images.shape[1], images.shape[2], 3)  # Add channel dimension
         #images = images.astype('float32') / 255  # Normalize pixel values
 
         print("len of images", len(images))
@@ -113,8 +113,6 @@ class FaceRecognitionCNN:
             Dense(self.num_classes, activation='softmax', name='fc8'),
         ])"""
             # Create model
-        
-        
 
            # model = Model(inputs=input_layer, outputs=output, name='vggface_vgg16')
 
@@ -124,7 +122,7 @@ class FaceRecognitionCNN:
             tf.keras.layers.RandomRotation(0.1),
             tf.keras.layers.RandomZoom(0.1),
             tf.keras.layers.Rescaling(1./255), # Normalizaing pixel values
-            Conv2D(32, (3, 3), activation='relu', input_shape=(250, 250, 1)),
+            Conv2D(32, (3, 3), activation='relu', input_shape=(250, 250, 3)),
             MaxPooling2D((2, 2)),
             Conv2D(64, (3, 3), activation='relu'),
             MaxPooling2D((2, 2)),
@@ -189,10 +187,18 @@ class FaceRecognitionCNN:
         self.build_model()
        # print(self.model.summary()) 
         
-        checkpointer = ModelCheckpoint(filepath='my_model.keras', verbose=1, save_best_only=True)
+       # checkpointer = ModelCheckpoint(filepath='my_model.keras', verbose=1, save_best_only=True)
         epochs = 20
-        self.model.fit(self.X_train, self.y_train, validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, callbacks=[checkpointer], verbose=1)
-    
+        #self.model.fit(self.X_train, self.y_train, validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, callbacks=[checkpointer], verbose=1)
+
+                
+        # Train the model
+        self.model.fit(self.X_train, self.y_train, validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
+
+        # Save the trained model
+        self.model.save('my_model.keras')
+
+
     def testing_model(self):
         
         # Test the model on the test set
@@ -209,7 +215,7 @@ class FaceRecognitionCNN:
 
 
 # Example usage:
-model = FaceRecognitionCNN(images_folder='images')
+model = FaceRecognitionCNN(images_folder='images_new')
 model.train()
 model.testing_model()
 

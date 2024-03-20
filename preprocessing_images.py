@@ -28,7 +28,7 @@ def image_cleaning_resizing(image):
     #img_rgb = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     #faces = face_recognition.face_locations(img_rgb)[0]
 
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=2, minSize=(30, 30))
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50))
     
     # Crop and save each detected face
     if len(faces) > 0:
@@ -45,8 +45,8 @@ def image_cleaning_resizing(image):
         face_resized = cv2.resize(face, target_size)
 
         #Creating label for the image
-        id = "491515"
-        name = "Sagar"
+        id = "3333335"
+        name = "Supreet"
         image_id =  id+"_"+name
 
         #Creating a directory with person's name
