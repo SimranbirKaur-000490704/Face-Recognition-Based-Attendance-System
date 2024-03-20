@@ -134,6 +134,7 @@ def generate_frames1():
             break
     cap.release()
     cv2.destroyAllWindows()"""
+
 """def generate_frames1():
     cap = cv2.VideoCapture(0)
     while True:
@@ -416,7 +417,7 @@ def image_cleaning_resizing(image):
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     
     # Detect faces in the image
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=2, minSize=(30, 30))
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50))
     
     # Crop and save each detected face
     #for i, (x, y, w, h) in enumerate(faces):
@@ -561,7 +562,7 @@ def handle_save_attendence():
             print("Grayscale image")
         # Detect faces in the frame
             
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30)) 
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50)) 
 
         # Draw rectangles around the detected faces
         if len(faces) > 0:
@@ -572,7 +573,7 @@ def handle_save_attendence():
             x_margin = int(w * margin)
             y_margin = int(h * margin)
             face_gray = gray[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
-
+            #face_gray = gray[y:y+h, x:x+w]
             #cv2.rectangle(gray, (x, y), (x + w, y + h), (0, 255, 0), 4)
             #cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             # Crop the detected face with a small margin
@@ -629,22 +630,25 @@ def handle_save_attendence():
                     writer.writeheader()
 
                 # Write data
-                writer.writerow({'id': predicted_label, 'name': name, 'date': date, 'time': time})
+                writer.writerow({'id': predicted_label, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)
+
+            #Calling save_form_data to save the form details
+            #save_form_data(form_data)
+                # Construct response JSON object with message and name
+            response_data = {
+                'message': 'Image saved successfully!',
+                'name': name  # Include the name in the response
+            }
+
+            # Return the response as JSON
+            return jsonify(response_data), 200
 
 
+        else:
+            print("No face detected")
+            return "Invalid request", 400
         #Calling Save_image function , send image data and form data to fetch name and id to label the image data
-        #save_image(image_data, form_data)
-
-        #Calling save_form_data to save the form details
-        #save_form_data(form_data)
-            # Construct response JSON object with message and name
-        response_data = {
-            'message': 'Image saved successfully!',
-            'name': name  # Include the name in the response
-        }
-
-        # Return the response as JSON
-        return jsonify(response_data), 200
+       
        # return 'Image saved successfully!', 200
     else:
         print("response is 400")

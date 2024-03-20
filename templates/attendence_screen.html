@@ -51,8 +51,8 @@
          }
       
          .webcam-feed {
-            width: 300px;
-            height: 200px;
+            width: 500px;
+            height: 500px;
             background-color: lightgrey;
             margin-bottom: 20px;
             transition: background-color 0.3s ease;
@@ -104,16 +104,15 @@
    </head>
 <body>
     <div class="container">
-
         <div class="box-container">
-            <h2 class="label">Ready, and Click!</h2>
+            <h2 class="label" id="responseLabel" >Ready, and Click!</h2>
             <div id="video-container" class="video-container">
             <img id="webcam-feed" src="/open-webcam1" alt="Webcam Feed" width="100%" height="100%">
             </div>
             <!-- Button to take attendance -->
             <button id="submit" class="button">Mark Attendance</button>
             <!-- Added new -->
-            <label id="responseLabel" /> 
+            <!--label id="responseLabel" /--> 
         </div>
     </div>
     <!--script>
@@ -168,7 +167,7 @@
                     // Access and display the name if available in the response
                     if (responseData.name) {
                         //const responseLabel = document.getElementById('responseLabel');
-                        responseLabel.innerText = `Name: ${responseData.name}`;
+                        responseLabel.innerText = `${responseData.name}`;
                         alert(`${responseData.name}'s attendence has been saved!`);
 
                     } else {

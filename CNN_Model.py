@@ -137,11 +137,39 @@ class FaceRecognitionCNN:
             Dense(256, activation='relu'),
             Dropout(0.2),
             Dense(self.num_classes, activation='softmax')
-        ])                                                
-        
+        ]) 
         self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    def train(self, test_size=0.2, epochs=0, batch_size=10):
+
+    """def build_model(self):
+        self.model = Sequential([
+            tf.keras.layers.RandomFlip("horizontal"),
+            tf.keras.layers.RandomRotation(0.1),
+            tf.keras.layers.RandomZoom(0.1),
+            tf.keras.layers.Rescaling(1./255), # Normalizaing pixel values
+            Conv2D(32, (3, 3), activation='relu', input_shape=(250, 250, 1)),
+            MaxPooling2D((2, 2)),
+            Conv2D(64, (3, 3), activation='relu'),
+            MaxPooling2D((2, 2)),
+            Conv2D(128, (3, 3), activation='relu'),
+            #Conv2D(128, (3, 3), activation='relu'),
+            MaxPooling2D((2, 2)),
+            Conv2D(256, (3, 3), activation='relu'),
+            #Conv2D(256, (3, 3), activation='relu'),
+            MaxPooling2D((2, 2)),
+            Conv2D(512, (3, 3), activation='relu'),
+            #Conv2D(512, (3, 3), activation='relu'),
+            MaxPooling2D((2, 2)),
+            Flatten(),
+            #Dense(512, activation='relu'),
+           # Dropout(0.5),
+            Dense(256, activation='relu'),
+            Dropout(0.5),
+            Dense(self.num_classes, activation='softmax')
+        ])  """                                            
+        
+
+    def train(self, test_size=0.2, epochs=20, batch_size=10):
         images, labels = self._load_images_and_labels()
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
