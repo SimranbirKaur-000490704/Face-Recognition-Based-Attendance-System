@@ -614,8 +614,8 @@ def handle_save_attendence():
             name = find_names(str(predicted_label))
            # cv2.putText(gray, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-            # Get the current date and time
-            current_datetime = datetime.datetime.now()
+            # Get the current date and time # code for saving attendence.csv
+            """current_datetime = datetime.datetime.now()
 
             # Print the current date and time
             print("Current date and time:", current_datetime)
@@ -633,14 +633,16 @@ def handle_save_attendence():
                     writer.writeheader()
 
                 # Write data
-                writer.writerow({'id': predicted_label, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)
+                writer.writerow({'id': predicted_label, 'name': name, 'date': date, 'time': time})"""
+                  #save_image(image_data, form_data)
 
             #Calling save_form_data to save the form details
             #save_form_data(form_data)
                 # Construct response JSON object with message and name
             response_data = {
                 'message': 'Image saved successfully!',
-                'name': name  # Include the name in the response
+                'name': name,  # Include the name in the response
+                'id': predicted_label
             }
 
             # Return the response as JSON
@@ -657,6 +659,42 @@ def handle_save_attendence():
         print("response is 400")
         return "Invalid request", 400
 
+
+@app.route('/save_attendence_in_csv', methods=['POST'])
+def save_attendence_in_csv():
+    print("saving attendence in csv")
+    json_data = request.json  # Accessing jsonData from the request JSON payload
+    if json_data:
+        print("json data not none")
+        name = json_data.get("name")  # Accessing image_data from jsonData
+        id = json_data.get("id")   # Remove 'data:image/jpeg;base64,' prefix
+        
+        # Get the current date and time
+        current_datetime = datetime.datetime.now()
+
+        # Print the current date and time
+        print("Current date and time:", current_datetime)
+
+        date = current_datetime.strftime("%Y-%m-%d")
+        time = current_datetime.strftime("%H:%M:%S")
+        # Write data to CSV file
+
+        with open('attendence.csv', 'a', newline='') as csvfile:
+            fieldnames = ['id', 'name', 'date', 'time']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+            # Write header if the file is empty
+            if csvfile.tell() == 0:
+                writer.writeheader()
+
+            # Write data
+            writer.writerow({'id': id, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)
+
+
+        return "OK", 200
+    else:
+        print("response is 400")
+        return "Invalid request", 400
 
 #Saving the form data 
 def save_form_data(form_data):
