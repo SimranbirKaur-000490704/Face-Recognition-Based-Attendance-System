@@ -57,8 +57,7 @@ def check_attendence():
 
         for row in csv_reader:
             data.append(row)
-
-    
+            
     return render_template('attendence_table_view.html', data=data)
 
 
@@ -529,12 +528,12 @@ def handle_save_attendence():
 def handle_save_attendence():
 
     #remove this code, this taking the hardcoded image
-    folder_path ="extra_images"
+    """folder_path ="extra_images"
     for filename in os.listdir(folder_path):
         # Check if the file is an image
         if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
             # Construct the full path to the image file
-            new_img = os.path.join(folder_path, filename)
+            new_img = os.path.join(folder_path, filename)"""
             # Preprocess and save the image
             
     #/////-------remove 
