@@ -21,7 +21,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 #recognizer.read('trainer/trainer.yml')
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-loaded_model = load_model('my_model.keras')
+loaded_model = load_model('trainer/my_model.keras')
 
 # Load the saved model
 #loaded_model = load_model('FR_Model.h5')
@@ -109,88 +109,6 @@ def generate_frames1():
     # Destroy all the windows
     cv2.destroyAllWindows()
 
-
-"""def generate_frames1():
- 
-    print("here it is")
-    faceCascade = cv2.CascadeClassifier('Cascades/haarcascade_frontalface_default.xml')
-    cap = cv2.VideoCapture(0)
-    cap.set(3,500) # set Width
-    cap.set(4,500) # set Height
-    while True:
-        ret, img = cap.read()
-        #img = cv2.flip(img, -1)
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = faceCascade.detectMultiScale(
-            gray,     
-            scaleFactor=1.2,
-            minNeighbors=5,     
-            minSize=(20, 20)
-        )
-        for (x,y,w,h) in faces:
-            cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-            roi_gray = gray[y:y+h, x:x+w]
-            roi_color = img[y:y+h, x:x+w]  
-        cv2.imshow('video',img)
-        k = cv2.waitKey(30) & 0xff
-        if k == 27: # press 'ESC' to quit
-            break
-    cap.release()
-    cv2.destroyAllWindows()"""
-
-"""def generate_frames1():
-    cap = cv2.VideoCapture(0)
-    while True:
-        success, img = cap.read()
-        if not success:
-            break
-        else:
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-            # Check if the frame is read successfully
-            if not success:
-                print("Error: Unable to read frame from video capture")
-                break
-
-
-            faces = face_cascade.detectMultiScale(
-              gray,     
-              scaleFactor=1.2,
-              minNeighbors=5,     
-              minSize=(20, 20)
-            )
-            for (x,y,w,h) in faces:
-                cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-                roi_gray = gray[y:y+h, x:x+w]
-                roi_color = img[y:y+h, x:x+w]  
-
-            
-
-            cv2.imshow('video',img)
-        
-            # Detect faces in the frame
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-            # Draw rectangles around the detected faces
-            for (x, y, w, h) in faces:
-                cv2.rectangle(img, (x, y), (x+w, y+h),  (0, 110, 0), 2)
-                
-                face = img[y:y+h, x:x+w]
-
-            # Encode frame to JPEG format
-            ret, buffer = cv2.imencode('.jpg', face)
-            face = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + face + b'\r\n')
-       
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    #save_image(cap)
-    cap.release()
-    # Destroy all the windows
-    cv2.destroyAllWindows()"""
     
 # Load webcam capture script here : original code 
 """def generate_frames1():
@@ -277,31 +195,6 @@ def find_names(id):
     
                 return name
             
-# Open the webcam window
-"""def open_webcam1():
-
-    vid = cv2.VideoCapture(0)
-
-    while True:
-    # Capture the video frame by frame
-        ret, frame = vid.read()
-
-    # Check if the frame is not None and has valid dimensions
-        if ret and frame.shape[0] > 0 and frame.shape[1] > 0:
-        # Display the resulting frame
-            cv2.imshow('frame', frame)
-            #cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
-
-    # the 'q' button is set as the quitting button you may use any desired button of your choice
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-# After the loop release the cap object
-    vid.release()
-
-# Destroy all the windows
-    cv2.destroyAllWindows()"""
-
 
 # Saving the image in folder
 @app.route('/save_image', methods=['POST'])
@@ -379,21 +272,6 @@ def save_image(image_data, form_data):
     # image_path = os.path.join('images', f'{image_id}.jpg')
     #cv2.imwrite(image_path, cropped_image)
 
-# Load image paths and corresponding labels from CSV file
-"""def load_data(csv_file):
-    X = []
-    y = []
-    with open(csv_file, 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            image_path, label = row
-            # Read image and preprocess it
-            image = cv2.imread(image_path)
-            #image = preprocess_image(image)  # Implement preprocess_image function as needed
-            X.append(image)
-            y.append(label)
-    return np.array(X), np.array(y)"""
-
 
 # Function to save the image path and label to a CSV file
 def save_label_to_csv(image_path, student_id):
@@ -432,29 +310,15 @@ def image_cleaning_resizing(image):
         margin = 0.2
         x_margin = int(w * margin)
         y_margin = int(h * margin)
-        face = image[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
+        #face = image[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
 
-        # Resize the cropped face to a standard size
-        target_size = (250, 250)
-        face_resized = cv2.resize(face, target_size)
-
-        return face_resized
-    
-    # Crop and return the first detected face(this logic can be used instaed of the above logic)
-    """if len(faces) > 0:
-        x, y, w, h = faces[0]
-        # Crop the detected face with a small margin
-        margin = 0.2
-        x_margin = int(w * margin)
-        y_margin = int(h * margin)
         face = image[max(0, y - y_margin):min(y + h + y_margin, image.shape[0]),
                      max(0, x - x_margin):min(x + w + x_margin, image.shape[1])]
         # Resize the cropped face to a standard size
         target_size = (250, 250)
         face_resized = cv2.resize(face, target_size)
+
         return face_resized
-    else:
-        return None"""
     
 
 # Saving the image in folder : this is a working code /for recognizer model
@@ -616,28 +480,6 @@ def handle_save_attendence():
             # Get the corresponding name for the predicted label
             name = find_names(str(predicted_label))
            # cv2.putText(gray, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-
-            # Get the current date and time # code for saving attendence.csv
-            """current_datetime = datetime.datetime.now()
-
-            # Print the current date and time
-            print("Current date and time:", current_datetime)
-
-            date = current_datetime.strftime("%Y-%m-%d")
-            time = current_datetime.strftime("%H:%M:%S")
-            # Write data to CSV file
-
-            with open('attendence.csv', 'a', newline='') as csvfile:
-                fieldnames = ['id', 'name', 'date', 'time']
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-                # Write header if the file is empty
-                if csvfile.tell() == 0:
-                    writer.writeheader()
-
-                # Write data
-                writer.writerow({'id': predicted_label, 'name': name, 'date': date, 'time': time})"""
-                  #save_image(image_data, form_data)
 
             #Calling save_form_data to save the form details
             #save_form_data(form_data)
