@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #954dc21f;
             overflow: hidden; /* Hide page overflow */
         }
 
@@ -43,12 +43,13 @@
             letter-spacing: 2px; /* Add letter spacing for emphasis */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add subtle text shadow */
             font-weight: bolder; /* Make the title bold */
-            transition: transform 0.3s ease-in-out; /* Add transition effect */
+            transition: color 0.3s ease-in-out, transform 0.1s ease-in-out;
         }
 
         /* Hover Effect */
         h1:hover {
-            transform: skew(-10deg); /* Apply skew transformation on hover */
+            color: #232323;
+            text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6); /* Add subtle text shadow */;
         }
 
         /* New Div Styles */
@@ -70,18 +71,21 @@
             font-style: normal;
             font-family: 'Cambria';
             font-weight: bold;
-            color: white;
             border: none;
             border-radius: 10px;
-            cursor: pointer;
             margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
             transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+            background-color: rgba(118, 59, 151, 1); /* Adjust the alpha (transparency) value as needed */
         }
 
         .back-button:hover {
             background-color: #954dc2;
             transform: scale(1.02);
-            box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.533);        
+            color: black;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 1);
+            background-color: rgba(149, 77, 194, 0.5); /* Adjust the alpha (transparency) value as needed */     
         }
 
         /* Table Container Styles */
@@ -108,6 +112,8 @@
         th {
             background-color: #f2f2f2;
             font-weight: bold;
+            color: white;
+            background-color: #954dc2dd; /* Change the background color of the heading cells */
             position: sticky; /* Make the heading sticky */
             top: 0; /* Stick to the top of the container */
             z-index: 1; /* Ensure it's above other elements */
