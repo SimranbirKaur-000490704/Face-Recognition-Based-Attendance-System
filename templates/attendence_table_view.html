@@ -1,79 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Attendance Table View</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Attendance</title>
     <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            overflow: hidden; /* Hide page overflow */
+        }
+
+        /* Container Styles */
+        .container {
+            position: absolute; /* Position absolutely */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center horizontally and vertically */
+            width: 95%; /* Expand to full width */
+            max-width: 1200px; /* Maximum width for the container */
+            height: 80%; /* Adjusted height */
+            max-height: 700px; /* Maximum height for the container */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Hide overflow from children */
+        }
+
+        /* Title Styles */
+        h1 {
+            margin: 0 0 20px; /* Add space below the title */
+            margin-right: 410px;
+            font-size: 42px; /* Increase font size for catchiness */
+            text-align: center; /* Center align the title */
+            font-family: Cambria;
+            color: #763B97; /* Purple color for title */
+            text-transform: uppercase; /* Convert text to uppercase */
+            letter-spacing: 2px; /* Add letter spacing for emphasis */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add subtle text shadow */
+            font-weight: bolder; /* Make the title bold */
+            transition: transform 0.3s ease-in-out; /* Add transition effect */
+        }
+
+        /* Hover Effect */
+        h1:hover {
+            transform: skew(-10deg); /* Apply skew transformation on hover */
+        }
+
+        /* New Div Styles */
+        .title-and-button {
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space between children */
+            align-items: center; /* Center children vertically */
+            margin-bottom: 0px; /* Add margin bottom for spacing */
+            flex-direction: row-reverse;
+        }
+
+        /* Button Styles */
+        .back-button {
+            display: flex;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #763B97;
+            color: white;
+            font-style: normal;
+            font-family: 'Cambria';
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        .back-button:hover {
+            background-color: #954dc2;
+            transform: scale(1.02);
+            box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.533);        
+        }
+
+        /* Table Container Styles */
+        .table-container {
+            max-height: calc(100% - 100px); /* Adjusted maximum height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Hide horizontal scrolling */
+        }
+
+        /* Table Styles */
         table {
-            border-collapse: collapse;
-            width: 99%;
-            max-height: 80%;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
         }
+
         th, td {
-            border: 1px solid black;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s ease-in-out;
         }
+
         th {
-            background-color: #bab9b9;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        tr:nth-child(even) {
             background-color: #f2f2f2;
+            font-weight: bold;
+            position: sticky; /* Make the heading sticky */
+            top: 0; /* Stick to the top of the container */
+            z-index: 1; /* Ensure it's above other elements */
         }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
         tr:nth-child(odd) {
             background-color: #ffffff;
         }
-        .table-container {
-            max-height: 300px; /* Set the maximum height of the table */
-            overflow-y: auto; /* Enable vertical scrolling if needed */
-        }
-        tbody {
-            height: 100%; /* Adjust the height as needed */
-            overflow-y: auto; /* Enable horizontal scrolling if needed */
-        }
-        .back-button {
-            margin-top: 20px; /* Adjust margin as needed */
-            font-size: 16px; /* Adjust font size as needed */
-            padding: 10px 20px; /* Adjust padding as needed */
-            background-color: #4CAF50; /* Green background color */
-            color: white; /* White text color */
-            border: none; /* Remove border */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Add cursor pointer on hover */
-        }
-        .back-button:hover {
-            background-color: #45a049; /* Darker green background color on hover */
+
+        tr:hover {
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <h1>Attendance</h1>
-    <button class="back-button" onclick="backButtonClicked()">Back</button>
-
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Student Name</th>
-                <th>Date</th>
-                <th>Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in data %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="container">
+        <div class="title-and-button">
+            <h1>Attendance List</h1>
+            <button class="back-button" onclick="backButtonClicked()">Back</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 <script>
     function backButtonClicked() {

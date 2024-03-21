@@ -5,116 +5,118 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Attendance Page</title>
       <style>
-         body {
-            margin: 0;
-            padding: 0;
-            background-color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-         }
-      
-         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden; /* Remove overflow to allow content to expand */
-            background-color: #f5f5f5;
-            transition: transform 0.2s ease;
-         }
-      
-         .container:hover {
-            transform: scale(1.02); /* Slight scale on hover */
-         }
-      
-         .container.expand {
-            max-width: 100%;
-            width: 400px;
-            transition: max-width 0.5s ease, width 0.5s ease;
-         }
-      
-         .box-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-         }
-      
-         .webcam-feed {
-            width: 500px;
-            height: 500px;
-            background-color: lightgrey;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease;
-         }
-      
-         .webcam-feed:hover {
-            background-color: #dcdcdc; /* Lighten color on hover */
-         }
-      
-         .button {
-            margin-top: 5px;
-            margin-right: 2px;
-            margin-left: 2px;
-            padding: 10px 20px;
-            background-color: #2196f3;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-         }
-      
-         .button-container {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
-                align-items: center;
-                margin-top: 15px;
-            }
-         .button:hover {
-            background-color: #1769aa; /* Darker blue on hover */
-         }
-      
-         .label {
-            font-family: 'Roboto', sans-serif; /* Example font family */
-            margin-bottom: 10px;
-            color: rgba(0, 0, 0, 0.706);
-         }
-         .successLabel {
-            margin-top: 5px;
-            font-size: 13px; /* Change font size */
+        body {
+           margin: 0;
+           padding: 0;
+           background-color: #e0e0e0;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           height: 100vh;
+           font-family: Arial, sans-serif;
         }
-    
-         .video-container {
-            text-align: center;
-            height: fit-content;
-            width: fit-content;
-            max-width: 600px;
-            max-height: 600px;
-         }
-          
-         /* Media query for smaller screens */
-         @media (max-width: 768px) {
-         .container {
-           max-width: 300px;
-         }
-         .webcam-feed, .video-container {
-            width: 100%;
-            }
-         }
-      </style>
+     
+        .container {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           max-width: 600px; /* Increased max-width */
+           padding: 30px; /* Increased padding */
+           border-radius: 15px; /* Increased border-radius */
+           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Increased box-shadow */
+           overflow: hidden; /* Remove overflow to allow content to expand */
+           background-color: #f5f5f5;
+           transition: transform 0.2s ease;
+        }
+     
+        .container:hover {
+           transform: scale(1.02); /* Slight scale on hover */
+        }
+     
+        .container.expand {
+           max-width: 100%;
+           width: 600px; /* Increased width */
+           transition: max-width 0.5s ease, width 0.5s ease;
+        }
+     
+        .box-container {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           background-color: white;
+           padding: 30px; /* Increased padding */
+           border-radius: 15px; /* Increased border-radius */
+           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Increased box-shadow */
+           transition: background-color 0.3s ease;
+        }
+     
+        .webcam-feed {
+           width: 600px; /* Increased width */
+           height: 600px; /* Increased height */
+           background-color: lightgrey;
+           margin-bottom: 30px; /* Increased margin-bottom */
+           transition: background-color 0.3s ease;
+        }
+     
+        .webcam-feed:hover {
+           background-color: #dcdcdc; /* Lighten color on hover */
+        }
+     
+        .button {
+           padding: 15px 30px; /* Increased padding */
+           background-color: #2196f3;
+           color: white;
+           border: none;
+           border-radius: 8px; /* Increased border-radius */
+           cursor: pointer;
+           font-size: 18px; /* Increased font-size */
+           transition: background-color 0.3s ease;
+        }
+     
+        .button:hover {
+           background-color: #1769aa; /* Darker blue on hover */
+        }
+     
+        .label {
+           font-family: 'Roboto', sans-serif; /* Example font family */
+           font-size: 28px; /* Increased font-size */
+           margin-bottom: 15px; /* Increased margin-bottom */
+        }
+     
+        .video-container {
+           text-align: center;
+           height: fit-content;
+           width: fit-content;
+           max-width: 700px; /* Increased max-width */
+           max-height: 700px; /* Increased max-height */
+        }
+        .button-container {
+           margin-top: 20px;
+           margin-bottom: 20px;
+           text-align: center;
+           height: fit-content;
+           width: fit-content;
+           max-width: 700px; /* Increased max-width */
+           max-height: 700px; /* Increased max-height */
+        }
+        .success-label {
+           margin-top: 20px;
+           font-family: 'Roboto', sans-serif; /* Example font family */
+           font-size: 13px;
+           background-color: #2196f3;
+           text-align: center;
+        }
+         
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+           .container {
+              max-width: 300px;
+           }
+           .webcam-feed, .video-container {
+              width: 100%;
+           }
+        }
+     </style>
    </head>
 <body>
     <div class="container">
