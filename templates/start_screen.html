@@ -14,20 +14,38 @@
                 background-color: #954dc21f;
                 transition: background-color 0.3s ease-in-out; /* Added transition */
             }
-    
+            body {
+                background-image: url('https://i.ibb.co/PNzgN6T/51141384-1176457222505124-5621945708941672448-n.jpg');
+                background-size: 72% ; /* Cover the entire background */
+                background-position: left; /* Center the background */
+                background-position-x: -36.5%;
+                background-blend-mode: darken;
+                background-repeat: no-repeat; /* Do not repeat the background image */
+            }
             .container {
                 width: 200%;
-                max-width: 580px;
+                max-width: 550px;
                 height: 200vh;
-                max-height: 580px;
+                max-height: 680px;
                 background-color: #f0eded;
+                margin-right: -20%;
                 border-radius: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
                 display: flex;
                 flex-direction: column;
                 transition: box-shadow 0.3s ease-in-out;
+                border: #2f2f2f;
+                border-style: solid;
+                
             }
-    
+            .container {
+                /*background-image: url('https://i.ibb.co/M8y26dD/pexels-pixabay-256490.jpg');*/
+                background-color: rgba(174, 197, 251, 0.273);
+                background-size: cover; /* Cover the entire background */
+                background-position: center; /* Center the background */
+                background-blend-mode: darken;
+                background-repeat: no-repeat; /* Do not repeat the background image */
+            }
             .container:hover {
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
             }
@@ -38,10 +56,11 @@
             }
 
             .label {
-                font-size: 43px;
+                font-size: 100px;
                 word-wrap: break-word;
                 font-weight: bolder;
-                color: #5d5d5d;
+                color: #2f2f2f;
+                text-decoration-line: 2px solid black;
                 font-style: normal;
                 font-family: 'Cambria';
                 text-align: center;
@@ -65,15 +84,16 @@
                 justify-content: center;
                 flex-direction: column;
                 text-align: center;
-                margin-top: 55px; /* Adjusted */
-                gap: 30px;
+                margin-top: 70px; /* Adjusted */
+                gap: 60px;
+                justify-content: space-between;
             }
     
             .button {
                 display: flex;
                 width: 100%; /* Adjusted */
-                max-width: 300px;
-                padding: 15px;
+                max-width: 320px;
+                padding: 20px;
                 justify-content: center; /* Align text horizontally within the button */
                 align-items: center; /* Align text vertically within the button */
                 text-align: center; /* Align text horizontally within the button */
@@ -108,8 +128,10 @@
                 position: relative;
                 object-fit: cover;
                 display: block;
-                margin-left: -9.2%;
-                width: 100%; /* Adjusted */
+                margin-left: 2%;
+                margin-top: -50%;
+                width: 45%; /* Adjusted */
+                height: 45%;
                 border-radius: 25px;
                 box-shadow: 10px 15px 25px 0 rgba(0, 0, 0, 0.1);
                 transition: filter 0.25s ease-in-out, transform 0.25s ease-in-out;
@@ -151,7 +173,7 @@
             </div>
     </div>
     <div class="container">
-            <label class="label">Facial Recognition Attendence Management System</label>
+            <label class="label">FRAMS</label>
             <div class="button-container">
                 <!-- Buttons inside the rectangle -->
                 <button  class="button"  

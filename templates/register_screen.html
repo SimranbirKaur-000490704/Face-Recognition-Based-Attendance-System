@@ -81,7 +81,13 @@
                 justify-content: center;
                 height: 100vh;
             }
-    
+            body {
+                background-image: url('https://i.ibb.co/M8y26dD/pexels-pixabay-256490.jpg');
+                background-size: cover; /* Cover the entire background */
+                background-position: center; /* Center the background */
+                background-blend-mode: screen;
+                background-repeat: no-repeat; /* Do not repeat the background image */
+            }
             .container {
                 display: flex;
                 flex-wrap: wrap;
@@ -93,6 +99,8 @@
                 border-radius: 10px;
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 overflow: hidden;
+                background-color: rgba(255, 255, 255, 0.5); /* Adjust the alpha (transparency) value as needed */
+
             }
     
             .left-half {
@@ -123,10 +131,12 @@
                 justify-content: center;
                 align-items: center;
                 max-width: 500px;
+                background-color: rgba(255, 255, 255, 0.5); /* Adjust the alpha (transparency) value as needed */
+
             }
     
             form {
-                border: 1px solid #ddd;
+                border: 1px solid #050505;
                 padding: 30px;
                 max-width: 420px;
                 width: 100%;
@@ -134,12 +144,12 @@
                 max-height: 400px;
                 background-color: #edeaea; /* Light gray background */
                 border-radius: 8px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
                 transition: background-color 0.3s ease-in-out;
             }
     
             form:hover {
-                background-color: #fff; /* White background on hover */
+                background-color: #edecec; /* White background on hover */
             }
     
             .input-group {
