@@ -34,11 +34,17 @@
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid black;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
             overflow: hidden; /* Hide overflow from children */
-            background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha (transparency) value as needed */
+            background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha (transparency) value as needed */
+            transition: background-color 0.3s ease-in-out;
         }
-
+        .container:hover{
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.8);
+            background-color: rgba(255, 255, 255, 0.9); /* Adjust the alpha (transparency) value as needed */
+            transition: background-color 0.3s ease-in-out;
+        }
         /* Title Styles */
         h1 {
             margin: 0 0 20px; /* Add space below the title */

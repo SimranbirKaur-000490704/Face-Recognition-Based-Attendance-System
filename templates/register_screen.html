@@ -98,12 +98,15 @@
                 max-height: 490px;
                 background-color: #fff;
                 border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+                border: 2px solid black;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
                 overflow: hidden;
                 background-color: rgba(255, 255, 255, 0.5); /* Adjust the alpha (transparency) value as needed */
-
+                transition: background-color 0.3s ease-in-out;
             }
-    
+            .container:hover{
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+;            }
             .left-half {
                 flex: 1.5;
                 background-color: #edeaea;

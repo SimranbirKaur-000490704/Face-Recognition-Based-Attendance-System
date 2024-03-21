@@ -6,6 +6,7 @@ import cv2
 import joblib
 import numpy as np
 import datetime
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
 #import camera
 #print(cv2._version_)

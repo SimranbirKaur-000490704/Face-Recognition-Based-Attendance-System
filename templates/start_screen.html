@@ -18,18 +18,18 @@
                 background-image: url('https://i.ibb.co/PNzgN6T/51141384-1176457222505124-5621945708941672448-n.jpg');
                 background-size: 72% ; /* Cover the entire background */
                 background-position: left; /* Center the background */
-                background-position-x: -33%;
+                background-position-x: -15%;
                 background-blend-mode: darken;
                 background-color: #8CB6DE;
                 background-repeat: no-repeat; /* Do not repeat the background image */
             }
             .container {
-                width: 200%;
-                max-width: 550px;
+                width: 180%;
+                max-width: 650px;
                 height: 200vh;
                 max-height: 680px;
                 background-color: #f0eded;
-                margin-right: -20%;
+                margin-right: -13.5%;
                 border-radius: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
                 display: flex;
@@ -60,7 +60,7 @@
             }
 
             .label {
-                font-size: 100px;
+                font-size: 50px;
                 word-wrap: break-word;
                 font-weight: bolder;
                 color: #2f2f2f;
@@ -88,15 +88,15 @@
                 justify-content: center;
                 flex-direction: column;
                 text-align: center;
-                margin-top: 70px; /* Adjusted */
-                gap: 60px;
+                margin-top: 60px; /* Adjusted */
+                gap: 50px;
                 justify-content: space-between;
             }
     
             .button {
                 display: flex;
                 width: 100%; /* Adjusted */
-                max-width: 320px;
+                max-width: 500px;
                 padding: 20px;
                 justify-content: center; /* Align text horizontally within the button */
                 align-items: center; /* Align text vertically within the button */
@@ -111,7 +111,7 @@
                 border-radius: 10px;
                 cursor: pointer;
                 font-size: 25px;
-                box-shadow: 5px 0px 5px 5px rgba(0, 0, 0, 0.5);
+                box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                 transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
                 background-color: rgba(118, 59, 151, 1); /* Adjust the alpha (transparency) value as needed */
             }
@@ -132,7 +132,7 @@
                 position: relative;
                 object-fit: cover;
                 display: block;
-                margin-left: 2%;
+                margin-left: 13%;
                 margin-top: -50%;
                 width: 45%; /* Adjusted */
                 height: 45%;
@@ -177,14 +177,14 @@
             </div>
     </div>
     <div class="container">
-            <label class="label">FRAMS</label>
+            <label class="label">Facial Recognition Attendance Management System</label>
             <div class="button-container">
                 <!-- Buttons inside the rectangle -->
                 <button  class="button"  
                     onclick="registerButtonClicked('/register_screen')"><span>&#x1F4D6;</span> Register</button>
                 <button  class="button" 
                     onclick="attendencebuttonClicked('/attendence_screen')"><span>&#x2705;</span> Take Attendence</button>
-                <button  class="button" onclick="checkAttendence('/check_attendence')"><span>&#x1F50D;</span> Check attendence</button>
+                <button  class="button" onclick="checkAttendence('/check_attendence')"><span>&#x1F50D;</span> Check Attendence</button>
             </div>
     </div>
     <script>
