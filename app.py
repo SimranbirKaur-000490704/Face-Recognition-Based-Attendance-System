@@ -526,7 +526,7 @@ def save_attendence_in_csv():
         if is_attendence_saved(id, name, date):
             print("Attendence for", name, "on", date, "is already saved.")
 
-            message = f"Attendance for {name} on {date} is already saved."
+            message = f" Your attendance for {date} has already been marked."
     
             response_data = {
                 'message': message

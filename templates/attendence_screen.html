@@ -64,7 +64,7 @@
      
         .button {
            padding: 15px 30px; /* Increased padding */
-           background-color: #2196f3;
+           background-color: #763B97;
            color: white;
            border: none;
            border-radius: 8px; /* Increased border-radius */
@@ -74,13 +74,7 @@
         }
      
         .button:hover {
-           background-color: #1769aa; /* Darker blue on hover */
-        }
-     
-        .label {
-           font-family: 'Roboto', sans-serif; /* Example font family */
-           font-size: 28px; /* Increased font-size */
-           margin-bottom: 15px; /* Increased margin-bottom */
+           background-color: #954dc2;; /* Darker blue on hover */
         }
      
         .video-container {
@@ -91,6 +85,8 @@
            max-height: 700px; /* Increased max-height */
         }
         .button-container {
+           font-family: Cambria;
+           color: #763B97; /* Purple color for title */
            margin-top: 20px;
            margin-bottom: 20px;
            text-align: center;
@@ -99,12 +95,28 @@
            max-width: 700px; /* Increased max-width */
            max-height: 700px; /* Increased max-height */
         }
-        .success-label {
-           margin-top: 20px;
-           font-family: 'Roboto', sans-serif; /* Example font family */
-           font-size: 13px;
-           background-color: #2196f3;
+        label {
+           margin-bottom: 5px;
+           font-family: Cambria; /* Example font family */
+           font-size: 20px;
+           background-color: #9fa1a3;
+           color: #ffffff;
            text-align: center;
+           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add subtle text shadow */
+           font-weight: bolder; /* Make the title bold */
+        }
+        h2 {
+            margin-top: 10px;
+            justify-self: center;
+            align-self: center;
+            font-size: 40px; /* Increase font size for catchiness */
+            text-align: center; /* Center align the title */
+            font-family: Cambria;
+            color: #763B97; /* Purple color for title */
+            letter-spacing: 2px; /* Add letter spacing for emphasis */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add subtle text shadow */
+            font-weight: bolder; /* Make the title bold */
+            transition: transform 0.3s ease-in-out; /* Add transition effect */
         }
          
         /* Media query for smaller screens */
@@ -121,7 +133,7 @@
 <body>
     <div class="container">
         <div class="box-container">
-            <h2 class="label" id="responseLabel" font-size="24px">Ready, and Click!</h2>
+            <h2 class="label" id="responseLabel">Ready, and Click!</h2>
             <div id="video-container" class="video-container">
             <img id="webcam-feed" src="/open-webcam1" alt="Webcam Feed" width="100%" height="100%">
             </div>
@@ -193,7 +205,7 @@
                 // If user clicks "Yes"
                 console.log("User clicked ok.");
                 //If user clicks yes, show name label on the picture!
-                responseLabel.innerText = `Hi ${name}`;
+                responseLabel.innerText = `Hi, ${name}!`;
                 //Call method for saving data to csv
                 saveAttendance(name, id)
 
