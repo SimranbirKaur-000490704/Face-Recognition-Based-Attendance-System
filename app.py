@@ -685,9 +685,12 @@ def save_attendence_in_csv():
         if is_attendence_saved(id, name, date):
             print("Attendence for", name, "on", date, "is already saved.")
 
+            message = f"Attendance for {name} on {date} is already saved."
+    
             response_data = {
-                'message': 'Your Attendence is already saved.'
+                'message': message
             }
+
         else:
             with open('attendence.csv', 'a', newline='') as csvfile:
                 fieldnames = ['id', 'name', 'date', 'time']
@@ -700,9 +703,11 @@ def save_attendence_in_csv():
                 # Write data
                 writer.writerow({'id': id, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)"""
 
-            response_data = {
-                'message': 'Attendence saved successfully!',
-            }
+                message = f"Attendance saved successfully!"
+
+                response_data = {
+                    'message': message,
+                }
 
         # Return the response as JSON
         return jsonify(response_data), 200

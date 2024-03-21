@@ -63,6 +63,9 @@
          }
       
          .button {
+            margin-top: 5px;
+            margin-right: 2px;
+            margin-left: 2px;
             padding: 10px 20px;
             background-color: #2196f3;
             color: white;
@@ -73,16 +76,27 @@
             transition: background-color 0.3s ease;
          }
       
+         .button-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+                margin-top: 15px;
+            }
          .button:hover {
             background-color: #1769aa; /* Darker blue on hover */
          }
       
          .label {
             font-family: 'Roboto', sans-serif; /* Example font family */
-            font-size: 24px;
             margin-bottom: 10px;
+            color: rgba(0, 0, 0, 0.706);
          }
-      
+         .successLabel {
+            margin-top: 5px;
+            font-size: 13px; /* Change font size */
+        }
+    
          .video-container {
             text-align: center;
             height: fit-content;
@@ -105,26 +119,20 @@
 <body>
     <div class="container">
         <div class="box-container">
-            <h2 class="label" id="responseLabel" >Ready, and Click!</h2>
+            <h2 class="label" id="responseLabel" font-size="24px">Ready, and Click!</h2>
             <div id="video-container" class="video-container">
             <img id="webcam-feed" src="/open-webcam1" alt="Webcam Feed" width="100%" height="100%">
             </div>
-            <!-- Button to take attendance -->
-            <button id="submit" class="button">Mark Attendance</button>
+            <div class="button-container">
+                <button class="button" type="back" onclick="backButtonClicked() ">Back</button>
+                 <!-- Button to take attendance -->
+                <button id="submit" class="button">Click</button>
+            </div>
             <!-- Added new -->
-            <!--label id="responseLabel" /--> 
+            <label class="successLabel" id="successLabel"></label>
         </div>
     </div>
-    <!--script>
-        function startWebcam(url) {
-            window.location.href = url;
-
-            // Add code here to start webcam
-           // window.alert('Its a match! Your attendence is submitted');
-           // event.preventDefault();
-            //window.history.back();
-        }
-    </script-->
+    
     <script>
         // Expand box-container when the page loads
         window.addEventListener('DOMContentLoaded', function() {
@@ -145,14 +153,12 @@
                 canvas.height = webcamFeed.height;
                 const context = canvas.getContext('2d');
                 context.drawImage(webcamFeed, 0, 0, canvas.width, canvas.height);
-
                 const dataURL = canvas.toDataURL('image/jpeg');
 
                 // Create JSON object with image data and form data
                 const jsonData = {
                     image_data: dataURL,
                 };
-
                 try {
                     // Send JSON data to server to save the image
                     const response = await fetch('/save_attendence', {
@@ -168,11 +174,9 @@
                     if (responseData) {
                         //const responseLabel = document.getElementById('responseLabel');
                         showConfirmation(`${responseData.name}`,`${responseData.id}` )
-
                     } else {
                         responseLabel.innerText = '';
                     }
-
                 } catch (error) {
                     console.error('Error:', error);
                     alert('Please check the lighting and distance from the camera, Try again!');
@@ -185,7 +189,7 @@
             const confirmed = confirm(`Confirm attendence for ${name}?`);
             if (confirmed) {
                 // If user clicks "Yes"
-                console.log("User clicked Yes.");
+                console.log("User clicked ok.");
                 //If user clicks yes, show name label on the picture!
                 responseLabel.innerText = `Hi ${name}`;
                 //Call method for saving data to csv
@@ -193,7 +197,7 @@
 
             } else {
                 // If user clicks "No" or closes the dialogue
-                console.log("User clicked No.");
+                console.log("User clicked cancel.");
                 alert('Please check proper lighting and distance from the camera, Try again!');
             }
         }
@@ -214,13 +218,16 @@
 
             if(responseData){
                 console.log(`${responseData.message}`);
-                alert(`${responseData.message}`);
-
+                successLabel.innerText = `${responseData.message}`
+                //alert(`${responseData.message}`);
             }else{
                 alert('Please try again!');
             }  
         }
-
+        function backButtonClicked() {
+            event.preventDefault();
+            window.history.back();
+        }
     </script>
 
 </body>
