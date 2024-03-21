@@ -267,7 +267,7 @@ def generate_frames1():
 #This method is used to find name of student from csv file for a student id
 def find_names(id):
     print("id in find names",id)
-    with open('form_data.csv', 'r', newline='') as file:
+    with open('csv_files/form_data.csv', 'r', newline='') as file:
         reader = csv.DictReader(file)
         for row in reader:
             if row['Student Id'] == id:
@@ -397,7 +397,7 @@ def save_image(image_data, form_data):
 
 # Function to save the image path and label to a CSV file
 def save_label_to_csv(image_path, student_id):
-    csv_file = 'labels.csv'
+    csv_file = 'csv_files/labels.csv'
     with open(csv_file, 'a') as file:
         file.write(f"{image_path},{student_id}\n")
 
@@ -692,7 +692,7 @@ def save_attendence_in_csv():
             }
 
         else:
-            with open('attendence.csv', 'a', newline='') as csvfile:
+            with open('csv_files/attendence.csv', 'a', newline='') as csvfile:
                 fieldnames = ['id', 'name', 'date', 'time']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -719,7 +719,7 @@ def save_attendence_in_csv():
 
 def is_attendence_saved(id, name, date):
     try:
-        with open('attendence.csv', 'r', newline='') as csvfile:
+        with open('csv_files/attendence.csv', 'r', newline='') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 if row[0] == id and row[1] == name and row[2] == date:
@@ -732,7 +732,7 @@ def is_attendence_saved(id, name, date):
 #Saving the form data 
 def save_form_data(form_data):
     print("save_form_data")
-    csv_file_path = 'form_data.csv'
+    csv_file_path = 'csv_files/form_data.csv'
     record_exists = False
 
     # Read existing records from CSV file

@@ -1,8 +1,0 @@
-name: Frams #Environment name
-dependencies:
-  - python=3.10.11
-  - pip
-  - numpy
-  - pandas
-  - scikit-learn
-  - flask
