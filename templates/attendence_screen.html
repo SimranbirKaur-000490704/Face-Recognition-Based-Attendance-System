@@ -18,8 +18,9 @@
         body {
             background-image: url('https://i.ibb.co/TgLcQ7q/51291856-1176457315838448-4094740009469345792-n.jpg');
             background-size: cover; /* Cover the entire background */
+            background-color: #838383;
             background-position: center; /* Center the background */
-            background-blend-mode: screen;
+            background-blend-mode: hard-light;
             background-repeat: no-repeat; /* Do not repeat the background image */
         }
         .container {
@@ -73,15 +74,13 @@
            background-color: #763B97;
            color: white;
            border: none;
-           font-size: 18px; /* Increased font-size */
-           font-family: Cambria;
-           font-weight: bold;
-           border: none;
-           border-radius: 10px;
            cursor: pointer;
-           box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
-           transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
-           background-color: rgba(118, 59, 151, 1); /* Adjust the alpha (transparency) value as needed */
+           font-size: 18px; /* Increased font-size */
+           font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+            background-color: rgba(118, 59, 151, 1); /* Adjust the alpha (transparency) value as needed */
         }
      
         .button:hover {
@@ -101,13 +100,14 @@
         }
         .button-container {
            font-family: Cambria;
+           display: flex;
            color: #763B97; /* Purple color for title */
            margin-top: 20px;
            margin-bottom: 20px;
            text-align: center;
-           height: fit-content;
-           width: fit-content;
-           justify-items: space-evenly;
+           gap: 100px;
+           justify-content: space-between;
+           align-items: center;
            max-width: 700px; /* Increased max-width */
            max-height: 700px; /* Increased max-height */
         }
@@ -153,7 +153,7 @@
             <div id="video-container" class="video-container">
             <img id="webcam-feed" src="/open-webcam1" alt="Webcam Feed" width="100%" height="100%">
             </div>
-            <div class="button-container">
+            <div class="button-container" style="gap: 40px">
                 <button class="button" type="back" onclick="backButtonClicked() ">Back</button>
                  <!-- Button to take attendance -->
                 <button id="submit" class="button">Click</button>
