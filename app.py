@@ -523,7 +523,7 @@ def save_attendence_in_csv():
         time = current_datetime.strftime("%H:%M:%S")
 
         # Check if the attendance entry already exists
-        if is_attendence_saved(id, name, date):
+        if is_attendence_saved(id, date):
             print("Attendence for", name, "on", date, "is already saved.")
 
             message = f" Your attendance for {date} has already been marked."
@@ -558,12 +558,12 @@ def save_attendence_in_csv():
         return "Invalid request", 400
 
 
-def is_attendence_saved(id, name, date):
+def is_attendence_saved(id, date):
     try:
         with open('csv_files/attendence.csv', 'r', newline='') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == id and row[1] == name and row[2] == date:
+                if row[0] == id and row[2] == date:
                     return True
                 
     except FileNotFoundError:
