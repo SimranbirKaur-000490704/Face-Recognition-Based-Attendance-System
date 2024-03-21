@@ -59,19 +59,17 @@
                 transform: scale(1.02);
             }
     
-            .button-container, 
-            .attendance-button-container {
+            .button-container {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
                 text-align: center;
-                margin-top: 150px; /* Adjusted */
+                margin-top: 55px; /* Adjusted */
                 gap: 30px;
             }
     
-            .button,
-            .attendance-button {
+            .button {
                 display: flex;
                 width: 100%; /* Adjusted */
                 max-width: 300px;
@@ -86,16 +84,16 @@
                 font-weight: bold;
                 color: white;
                 border: none;
-                border-radius: 5px;
+                border-radius: 10px;
                 cursor: pointer;
                 font-size: 25px;
-                transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+                transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
             }
     
-            .button:hover,
-            .attendance-button:hover {
+            .button:hover {
                 background-color: #954dc2;
-                transform: scale(1.07);
+                transform: scale(1.025);
+                box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
             }
     
             .image-container {
@@ -153,10 +151,10 @@
             <div class="button-container">
                 <!-- Buttons inside the rectangle -->
                 <button  class="button"  
-                    onclick="registerButtonClicked('/register_screen')">Register</button>
-                <button  class="attendance-button" 
-                    onclick="attendencebuttonClicked('/attendence_screen')">Take Attendence</button>
-                <button  class="button" onclick="checkAttendence('/check_attendence')">Check attendence</button>
+                    onclick="registerButtonClicked('/register_screen')"><span>&#x1F4D6;</span> Register</button>
+                <button  class="button" 
+                    onclick="attendencebuttonClicked('/attendence_screen')"><span>&#x2705;</span> Take Attendence</button>
+                <button  class="button" onclick="checkAttendence('/check_attendence')"><span>&#x1F50D;</span> Check attendence</button>
             </div>
     </div>
     <script>
@@ -186,4 +184,3 @@
     </script>
 </body>
 </html>
-
