@@ -14,7 +14,7 @@ os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 from keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
 
-app = Flask("FRAMS")
+app = Flask("FRAMS", static_folder='templates')
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
