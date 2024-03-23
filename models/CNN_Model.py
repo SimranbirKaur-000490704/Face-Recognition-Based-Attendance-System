@@ -219,5 +219,3 @@ class FaceRecognitionCNN:
 model = FaceRecognitionCNN(images_folder='images')
 model.train()
 model.testing_model()
-
-
