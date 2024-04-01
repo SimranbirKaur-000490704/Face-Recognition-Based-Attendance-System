@@ -244,6 +244,24 @@
                     width: 100%;
                 }
             }
+            .spinner {
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #3498db;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+                position: absolute; /* Position the spinner */
+                top: 50%; /* Center vertically */
+                left: 50%; /* Center horizontally */
+                transform: translate(-50%, -50%); /* Center the spinner precisely */
+                z-index: 9999; /* Make sure the spinner is rendered above other elements */
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
         </style>
     </head>
 <body>
@@ -254,6 +272,10 @@
                 <!--video id="video" width="100%" height="100%" autoplay></video-->
             </div>
             <!--button id="captureButton">Capture</button-->
+        </div>
+        <div id="spinnerContainer" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+            <div class="spinner"></div>
+            <div id="spinnerText" style="margin-top: 15px; font-size: 12px;"> Registering,Please wait !...</div>
         </div>
         <div class="right-half">
             <div id="registration-form"  ></div>
@@ -271,6 +293,7 @@
                     <div class="button-container">
                         <button type="button" onclick="backButtonClicked() ">Back</button>
                         <button id="submit">Submit</button>
+                        <button id="register">Register</button>
                         <!--button type="submit" onclick="registrationButtonClicked('/')">Submit</button-->
                     </div>
                 </form>
@@ -380,6 +403,32 @@
         function backButtonClicked() {
             event.preventDefault();
             window.history.back();
+        }
+    </script>
+    <script>
+        // Function to load the model
+        document.getElementById('register').addEventListener('click', function() {
+            document.getElementById('spinnerContainer').style.display = 'flex';
+            loadModel();
+        });
+
+        // Function to load the model
+        function loadModel() {
+            fetch('/register_user', {
+                method: 'POST' // Specify the POST method
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                if(data.message == "ok"){
+                // Stop the spinner
+                    document.getElementById('spinnerContainer').style.display = 'none';
+                    alert('Registration is completed, Take Attendence!');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading model:', error);
+            });
         }
     </script>
 </body>
