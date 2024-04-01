@@ -14,7 +14,6 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-
 def load_face_recognition_models():
     """
     Load the face detection, landmark predictor, and face recognition models.
@@ -100,7 +99,7 @@ def loadModel():
     face_detector, shape_predictor, face_encoder = load_face_recognition_models()
 
     # Preprocess images and labels
-    encodings, labels, num_classes = preprocess_images_and_labels('img', face_detector, shape_predictor, face_encoder)
+    encodings, labels, num_classes = preprocess_images_and_labels('images', face_detector, shape_predictor, face_encoder)
 
     # Preprocess data
     X_train, X_test, y_train, y_test = train_test_split(encodings, labels, test_size=0.2, random_state=42,
@@ -114,7 +113,6 @@ def loadModel():
 
     # Evaluate CNN model
     evaluate_model(trained_model, X_test, y_test)
-
 
 
 loadModel()

@@ -251,7 +251,7 @@
                 width: 40px;
                 height: 40px;
                 animation: spin 1s linear infinite;
-                position: absolute; /* Position the spinner */
+                position:relative; /* Position the spinner */
                 top: 50%; /* Center vertically */
                 left: 50%; /* Center horizontally */
                 transform: translate(-50%, -50%); /* Center the spinner precisely */
@@ -275,7 +275,7 @@
         </div>
         <div id="spinnerContainer" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
             <div class="spinner"></div>
-            <div id="spinnerText" style="margin-top: 15px; font-size: 12px;"> Registering,Please wait !...</div>
+            <div id="spinnerText" style="margin-top: 50px; font-size: 12px;"> Registering,Please wait !...</div>
         </div>
         <div class="right-half">
             <div id="registration-form"  ></div>
@@ -376,7 +376,7 @@
 
                 try {
                     // Send JSON data to server to save the image
-                    const response = await fetch('/save_image', {
+                    const response = await fetch('/save_student_data', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
