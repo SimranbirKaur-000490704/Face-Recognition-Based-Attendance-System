@@ -22,7 +22,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 #recognizer.read('trainer/trainer.yml')
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-loaded_model = load_model('trainer/my_model.keras')
+loaded_model = load_model('trainer/best_model.h5')
 
 # Load the saved model
 #loaded_model = load_model('FR_Model.h5')
