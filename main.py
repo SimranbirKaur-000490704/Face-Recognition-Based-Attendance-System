@@ -215,19 +215,23 @@ def image_cleaning_resizing(image):
         return face_resized
     
 # This method saves the attendence of the student, by taking the image, converting into encodings 
-# encodings are fed to the model, that predicts the correct face and returns the label value of the image 
-# Label is then checked for a name of the student to display
-# Called from the attendence screen
+# encodings are fed to the model, that predicts/recognize the correct face and returns the label value of the image 
+# Label is then checked for a name of the student to display.
+# Called from the attendence screen.
 @app.route('/save_attendence', methods=['POST'])
 def handle_save_attendence():
     name = ""
     json_data = request.json  # Accessing jsonData from the request JSON payload
     if json_data:
+
+        ############## INCOMING IMAGE DATA FROM WEBCAM #####################
         image_data = json_data.get("image_data")  # Accessing image_data from jsonData
         image_data = image_data.split(',')[1]  # Remove 'data:image/jpeg;base64,' prefix
         nparr = np.frombuffer(base64.b64decode(image_data), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        ############## FACE DETECTION #####################
         faces = face_cascade.detectMultiScale(image, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50)) 
 
         if len(faces) > 0:
@@ -237,18 +241,24 @@ def handle_save_attendence():
             y_margin = int(h * margin)
             face = image[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
 
+            ############## FACE IMAGE RESIZING #####################
             #Incoming picture during attendence is resized and encoded, as the model takes the 128 encoded picture for recognition
             face_resized = cv2.resize(face, (250, 250))
+
+            ############## FACE IMAGE ENCODING #####################
             encface_encs = face_encodings(face_resized)
 
+
+            ############## FACE RECOGNITION #####################
             # Ensure that encface_encs is not empty
             if len(encface_encs) > 0:
                 encface_encs = np.array(encface_encs)  # Convert list to numpy array
 
                 # Predict using the loaded model
                 loaded_model = load_model('trainer/my_model_dlib.keras')
-                predictions = loaded_model.predict(encface_encs)
 
+                predictions = loaded_model.predict(encface_encs)
+                ############## FACE ID LABEL DECODING #####################
                 # Initialize LabelEncoder
                 le = joblib.load('label_encoder.pkl')
 
@@ -256,6 +266,7 @@ def handle_save_attendence():
                 predicted_labels_encoded = np.argmax(predictions, axis=1)  # Assuming output is one-hot encoded
                 predicted_label = le.inverse_transform(predicted_labels_encoded)
         
+                ############## FACE ID LABEL #####################
                 idLabel = int(predicted_label[0])  # Access the first (and only) element of the list and convert it to an integer
                 print("label value predicted", predicted_label, "extracted", idLabel)
 
@@ -265,7 +276,8 @@ def handle_save_attendence():
                 # Construct the full file path
                 filepath = os.path.join("new_images", image_filename)
                 cv2.imwrite(filepath, face_resized)
-                
+
+                ############## FACE NAME  #####################
                 # Get the corresponding name for the predicted label to be shown to the user
                 name = find_names(str(idLabel))
           

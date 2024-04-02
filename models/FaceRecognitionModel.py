@@ -10,6 +10,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
 import joblib
 import logging
+import pickle
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -50,11 +52,17 @@ def preprocess_images_and_labels(images_folder, face_detector, shape_predictor, 
                     continue
                 face_encs = extract_face_encodings(image, face_detector, shape_predictor, face_encoder)
                 encodings.extend(face_encs)
+                #labels.extend([os.path.basename(root)])
                 labels.extend([os.path.basename(root)] * len(face_encs))
+
+                #Saving encosings in a pickle file
+                #save_encodings(labels, face_encs )
+
     le = LabelEncoder()
     labels_encoded = le.fit_transform(labels)
     joblib.dump(le, 'label_encoder.pkl')
     num_classes = len(le.classes_)
+    print("clasess", num_classes)
     labels_encoded = to_categorical(labels_encoded, num_classes)  # Convert labels to one-hot encoding
     return np.array(encodings), np.array(labels_encoded), num_classes
 
@@ -63,21 +71,14 @@ def build_model(input_shape, num_classes):
     """
     Build the CNN model.
     """
+    print("num clasees", num_classes)
     model = Sequential([
         Flatten(input_shape=input_shape),
         Dense(256, activation='relu'),
         Dropout(0.5),
         Dense(num_classes, activation='softmax')
     ])
-    return model
-
-
-def train_model(model, X_train, y_train, X_test, y_test):
-    """
-    Train the CNN model.
-    """
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=30, batch_size=32)
     return model
 
 
@@ -109,10 +110,14 @@ def loadModel():
     model = build_model(input_shape=X_train.shape[1:], num_classes=num_classes)
 
     # Train CNN model
-    trained_model = train_model(model, X_train, y_train, X_test, y_test)
+    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=30, batch_size=32)
+
+    # Save the trained model
+    model.save('trainer/my_model_dlib.keras')
 
     # Evaluate CNN model
-    evaluate_model(trained_model, X_test, y_test)
+    evaluate_model(model, X_test, y_test)
 
 
 loadModel()
+

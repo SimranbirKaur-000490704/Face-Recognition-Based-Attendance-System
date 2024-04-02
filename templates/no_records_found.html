@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Attendance</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #954dc21f;
+            overflow: hidden; /* Hide page overflow */
+            height: 100vh;
+        }
+        body {
+            background-image: url('/templates/bgimages/pexels-pixabay-207684.jpg');
+            background-size: cover; /* Cover the entire background */
+            background-color:#8d8d8d;
+            background-position: center; /* Center the background */
+            background-blend-mode: overlay;
+            background-repeat: no-repeat; /* Do not repeat the background image */
+        }
+        /* Container Styles */
+        .container {
+            position: absolute; /* Position absolutely */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center horizontally and vertically */
+            width: 100%; /* Expand to full width */
+            max-width: 1300px; /* Maximum width for the container */
+            height: 100%; /* Adjusted height */
+            max-height: 500px; /* Maximum height for the container */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            border: 2px solid black;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden; /* Hide overflow from children */
+            background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha (transparency) value as needed */
+            transition: background-color 0.3s ease-in-out;
+        }
+        .container:hover{
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.8);
+            transition: background-color 0.3s ease-in-out;
+        }
+        /* Title Styles */
+        h1 {
+            margin: 0 0 20px; /* Add space below the title */
+            margin-right: 410px;
+            font-size: 42px; /* Increase font size for catchiness */
+            text-align: center; /* Center align the title */
+            font-family: Cambria;
+            color: #763B97; /* Purple color for title */
+            text-transform: uppercase; /* Convert text to uppercase */
+            letter-spacing: 2px; /* Add letter spacing for emphasis */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add subtle text shadow */
+            font-weight: bolder; /* Make the title bold */
+            transition: color 0.3s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        label{
+            margin: 0 0 20px; /* Add space below the title */
+            margin-right: 500px;
+            font-size: 30px; /* Increase font size for catchiness */
+            text-align:center; /* Center align the title */
+            font-family: Cambria;
+            color: #000000; /* Purple color for title */
+            letter-spacing: 2px; /* Add letter spacing for emphasis */
+        }
+        p{
+            margin: 0 0 20px; /* Add space below the title */
+            margin-right: 400px;
+            font-size: 20px; /* Increase font size for catchiness */
+            text-align:center; /* Center align the title */
+            font-family: Cambria;
+            color: #000000; /* Purple color for title */
+            letter-spacing: 2px; /* Add letter spacing for emphasis */
+        }
+        /* Hover Effect */
+        h1:hover {
+            color: #232323;
+            text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6); /* Add subtle text shadow */;
+        }
+
+        /* New Div Styles */
+        .title-and-button {
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space between children */
+            align-items: center; /* Center children vertically */
+            margin-bottom: 0px; /* Add margin bottom for spacing */
+            flex-direction: row-reverse;
+        }
+        /* New Div Styles */
+        .no-records-found {
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space between children */
+            align-items: center; /* Center children vertically */
+            margin-bottom: 0px; /* Add margin bottom for spacing */
+            flex-direction: row-reverse;
+            
+        }
+
+
+        /* Button Styles */
+        .back-button {
+            display: flex;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #763B97;
+            color: white;
+            font-style: normal;
+            font-family: 'Cambria';
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+            background-color: rgba(118, 59, 151, 1); /* Adjust the alpha (transparency) value as needed */
+        }
+
+        .back-button:hover {
+            background-color: #954dc2;
+            transform: scale(1.02);
+            color: black;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 1);
+            background-color: rgba(149, 77, 194, 0.5); /* Adjust the alpha (transparency) value as needed */     
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-and-button">
+            <h1>Attendance List</h1>
+            <button class="back-button" onclick="backButtonClicked()">Back</button>
+        </div>
+        <div class="no-records-found">
+            <label>No Records Found</label>
+        </div>
+        <div class="no-records-found">
+            <p>There are no attendance records available</p>
+        </div>
+    </div>
+</body>
+<script>
+    function backButtonClicked() {
+        event.preventDefault();
+        window.history.back();
+    }
+</script>
+</html>

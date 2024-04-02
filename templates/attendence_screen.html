@@ -231,8 +231,12 @@
                     
                     // Access and display the name if available in the response
                     if (responseData) {
+                        if(responseData.name=="Unknown"){
+                            alert(responseData.message);
+                        }else{
                         //const responseLabel = document.getElementById('responseLabel');
-                        showConfirmation(`${responseData.name}`,`${responseData.id}` )
+                             showConfirmation(`${responseData.name}`,`${responseData.id}` )
+                        }
                     } else {
                         responseLabel.innerText = '';
                     }
@@ -278,7 +282,6 @@
             if(responseData){
                 console.log(`${responseData.message}`);
                 successLabel.innerText = `${responseData.message}`
-                //alert(`${responseData.message}`);
             }else{
                 alert('Please try again!');
             }  

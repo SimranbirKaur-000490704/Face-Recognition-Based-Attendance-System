@@ -7,48 +7,76 @@ import joblib
 import numpy as np
 import datetime
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-
-#import camera
-#print(cv2._version_)
-#from tensorflow.keras.models import load_model
+from keras.models import load_model
+import tensorflow as tf
+import dlib
 from keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
+import tensorflow_hub as hub
+import subprocess
 
 app = Flask("FRAMS", static_folder='templates')
 
+#face detection xml
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-#recognizer = cv2.face.LBPHFaceRecognizer_create()
-#recognizer.read('trainer/trainer.yml')
-font = cv2.FONT_HERSHEY_SIMPLEX
+# Initiate the saved model variable
+loaded_model = load_model('trainer/my_model_dlib.keras')
 
-loaded_model = load_model('trainer/best_model.h5')
+# Load the face detector, landmark predictor, and face recognition model
+face_detector = dlib.get_frontal_face_detector()
+shape_predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+face_encoder = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
 
-# Load the saved model
-#loaded_model = load_model('FR_Model.h5')
+# Function to extract facial encodings from an image
+# it uses face_detector, shape_predictor, face_encoder method to generate encodings.
+def face_encodings(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    rects = face_detector(gray, 1)
+    encodings = [np.array(face_encoder.compute_face_descriptor(image, shape_predictor(gray, rect))) for rect in rects]
+    return encodings
 
+# URl for start screen
 @app.route('/')
 def index():
     return render_template('start_screen.html')
 
+# URl for register screen
 @app.route('/register_screen')
 def register_screen():
     return render_template('register_screen.html')
 
+# URl for attendence screen
 @app.route('/attendence_screen')
 def attendence_screen():
     return render_template('attendence_screen.html')
 
+# URl to open a web cam
 @app.route('/open-webcam')
 def open_webcam():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/open-webcam1')
-def open_webcam1():
-    return Response(generate_frames1(), mimetype='multipart/x-mixed-replace; boundary=frame')
+# Handle the image and form data
+# Called from register screen to send captured image and form data of a student while registering. 
+@app.route('/save_student_data', methods=['POST'])
+def handle_save_image():
+    print("saveimage method", request.json.get("jsonData") )
+    json_data = request.json  # Accessing jsonData from the request JSON payload
+    if json_data:
+        image_data = json_data.get("image_data")  # Accessing image_data from jsonData
+        form_data = json_data.get("form_data") # Accessing form_data from jsonData
+
+        #Calling Save_image function , send image data and form data to fetch name and id to label the image data
+        save_image(image_data, form_data)
+
+        return 'Image saved successfully!', 200
+
+    else:
+        return "Invalid request", 400
 
 # Route to render the table view with data from the CSV file
-@app.route('/check_attendence')
+# Called from start screen
+"""@app.route('/check_attendence')
 def check_attendence():
     # Read data from CSV file
     data = []
@@ -59,10 +87,45 @@ def check_attendence():
         for row in csv_reader:
             data.append(row)
             
+    return render_template('attendence_table_view.html', data=data)"""
+
+# Route to render the table view with data from the attendence.csv file
+# Called from start screen
+@app.route('/check_attendence')
+def check_attendence():
+    # Check if the file exists
+    filename = 'csv_files/attendence.csv'
+    if not os.path.exists(filename):
+        return render_template('no_records_found.html')
+
+    # Read data from CSV file
+    data = []
+    with open(filename, 'r') as file:
+        csv_reader = csv.reader(file)
+        headers = next(csv_reader, None)  # Skip the first row (headers)
+        if headers is None:
+            return render_template('no_records_found.html')
+
+        for row in csv_reader:
+            data.append(row)
+            
     return render_template('attendence_table_view.html', data=data)
 
+# Method to register user after capturing pcitures
+# It calls the model file for training on the new face
+# Called from register screen, from register button action
+@app.route('/register_user', methods=['POST'])
+def process_registration():
+    try:
+        # Execute the FaceRecognitionModel.py file
+        subprocess.run(['python', 'models/FaceRecognitionModel.py'])
+        return jsonify({"message": "ok"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# Load your webcam capture script here
+
+# Load the webcam capture script here
+# Called from register and attendence screen for accessing a webcam
 def generate_frames():
     cap = cv2.VideoCapture(0)
     while True:
@@ -86,103 +149,8 @@ def generate_frames():
     # Destroy all the windows
     cv2.destroyAllWindows()
 
-def generate_frames1():
-    cap = cv2.VideoCapture(0)
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
-        else:
-             # Flip the frame horizontally
-            frame = cv2.flip(frame, 1)  # 1 for horizontal flip, 0 for vertical flip, -1 for both
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
 
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    #save_image(cap)
-    cap.release()
-    # Destroy all the windows
-    cv2.destroyAllWindows()
-
-    
-# Load webcam capture script here : original code 
-"""def generate_frames1():
-    # Load the pre-trained Haar Cascade classifier for face detection    
-    cap = cv2.VideoCapture(0)
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
-        else:
-            # Convert the frame to grayscale for face detection
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # change 6-mar
-            
-            # Detect faces in the frame
-            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-            
-
-            # Draw rectangles around the detected faces / commented out when using differnet model other than recogniser
-            for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 110, 0), 2)
-                 
-                margin = 0.2
-                x_margin = int(w * margin)
-                y_margin = int(h * margin)
-                face_gray = gray[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
-
-                # Resize the cropped face to a standard size
-                target_size = (250, 250)
-                face_resized = cv2.resize(face_gray, target_size)
-                
-                # Add channel dimension
-                face_batch = np.expand_dims(face_resized, axis=2)  # Add channel dimension
-                
-                # Normalize pixel values
-                face_batch = face_batch / 255.0
-
-                yield face_batch
-
-                #face_batch = np.expand_dims(face_resized, axis=0)
-                #face_batch = np.expand_dims(face_batch, axis=3)  # Add channel dimension
-
-                # Initialize LabelEncoder
-                le = joblib.load('label_encoder.pkl')
-                # Make prediction using the loaded model
-                predictions = loaded_model.predict(face_batch)
-                
-                print("predictions",predictions)
-                # Convert prediction to label (or name)
-                predicted_label_encoded = np.argmax(predictions)  # Assuming output is one-hot encoded
-                print("encoded",predicted_label_encoded)
-                predicted_label = le.inverse_transform([predicted_label_encoded])[0]
-
-                print("label value predicted", predicted_label)
-                name = find_names(str(predicted_label))
-
-            # Get the corresponding name for the predicted label
-
-                cv2.putText(frame, name, (x+5,y-5), font, 1, (255,255,255), 2)
-                #cv2.putText(frame, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1)
-
-            
-            # Encode frame to JPEG format
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame_encoded = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_encoded + b'\r\n')
-       
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()"""
-
-#This method is used to find name of student from csv file for a student id
+#This method is used to find name of a student from csv file for a student id after being recognised.
 def find_names(id):
     print("id in find names",id)
     with open('csv_files/form_data.csv', 'r', newline='') as file:
@@ -191,60 +159,25 @@ def find_names(id):
             if row['Student Id'] == id:
                 name = row['Student Name']
                 print("id in find names",name)
-                #names.append(name)
-    
                 return name
             
-
-# Saving the image in folder
-@app.route('/save_image', methods=['POST'])
-def handle_save_image():
-    print("saveimage method", request.json.get("jsonData") )
-
-    json_data = request.json  # Accessing jsonData from the request JSON payload
-    if json_data:
-        image_data = json_data.get("image_data")  # Accessing image_data from jsonData
-        form_data = json_data.get("form_data") 
-
-        #Calling Save_image function , send image data and form data to fetch name and id to label the image data
-        save_image(image_data, form_data)
-
-        return 'Image saved successfully!', 200
-
-    else:
-        return "Invalid request", 400
-
+# this method saves the registered images with proper labels by detecting the face coordinates, 
+# perform some preprocessings, cropping and resizing to (250, 250) dimensions.
 def save_image(image_data, form_data):
-    print("in save images method")
     image_data = image_data.split(',')[1]  # Remove 'data:image/jpeg;base64,' prefix
     nparr = np.frombuffer(base64.b64decode(image_data), np.uint8)
-
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     
     # Calling image_cleaning_resizing function to resize and crop the image to get a face
     cropped_image = image_cleaning_resizing(img)
-    
-    print(" image")
 
-    # Check the shape of the image
-    if len(cropped_image.shape) == 3:
-        # Image has 3 dimensions, indicating it's RGB
-        print("RGB image")
-    elif len(cropped_image.shape) == 2:
-        # Image has 2 dimensions, indicating it's grayscale
-        print("Grayscale image")
-
-    #Calling generate unique id function
-    #image_id = generate_unique_id()
-
-    #Creating label for the image
+    #Creating label for the image with student name and student id
     id = form_data.get("Student Id") 
     name = form_data.get("Student Name")
     image_id =  id+"_"+name
 
     #Creating a directory with person's name
     directory = os.path.join('images', id)
-
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -254,35 +187,21 @@ def save_image(image_data, form_data):
     count = 1
     while os.path.exists(os.path.join(directory, image_filename)):
         image_filename = f'{image_id}_{count}.jpg'
-        count += 1
-            
+        count += 1 
     image_path = os.path.join(directory, image_filename)
+
+    # Writing the cropped processed image to a folder
     cv2.imwrite(image_path, cropped_image)
 
-    save_label_to_csv(image_path, id)
-
-    print(f"Image saved to: {image_path}")
-
+    #Sending a form data further for saving 
     #Calling save_form_data to save the form details
-    save_form_data(form_data)
-
-    #image_path = os.path.join(directory, f'{image_id}.jpg')
-    #cv2.imwrite(image_path, cropped_image)
-    # Save the cropped image to a folder with the unique ID as the filename
-    # image_path = os.path.join('images', f'{image_id}.jpg')
-    #cv2.imwrite(image_path, cropped_image)
-
-
-# Function to save the image path and label to a CSV file
-def save_label_to_csv(image_path, student_id):
-    csv_file = 'csv_files/labels.csv'
-    with open(csv_file, 'a') as file:
-        file.write(f"{image_path},{student_id}\n")
-
-
+    if(save_form_data(form_data)):
+        return 'Form data saved successfully!', 200
+    
+   
 #Function to detect face and crop the image, resize it and return
+#Preprocessing method , checks the necessary condition and return the resized face to save to calling fucntion
 def image_cleaning_resizing(image):
-       
     if isinstance(image, str):
         # Load the image from file
         image = cv2.imread(image)
@@ -293,9 +212,6 @@ def image_cleaning_resizing(image):
     
     # Convert the image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    
-    # Load the pre-trained Haar Cascade classifier for face detection
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     
     # Detect faces in the image
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50))
@@ -317,222 +233,141 @@ def image_cleaning_resizing(image):
         # Resize the cropped face to a standard size
         target_size = (250, 250)
         face_resized = cv2.resize(face, target_size)
-
         return face_resized
     
-
-# Saving the image in folder : this is a working code /for recognizer model
-"""@app.route('/save_attendence', methods=['POST'])
-def handle_save_attendence():
-    print("handle_save_attendence method", request.json.get("jsonData") )
-
-    json_data = request.json  # Accessing jsonData from the request JSON payload
-    if json_data:
-        image_data = json_data.get("image_data")  # Accessing image_data from jsonData
-        image_data = image_data.split(',')[1]  # Remove 'data:image/jpeg;base64,' prefix
-        nparr = np.frombuffer(base64.b64decode(image_data), np.uint8)
-        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            
-        # Detect faces in the frame
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)) 
-
-        # Draw rectangles around the detected faces
-        for (x, y, w, h) in faces:
-            #cv2.rectangle(img, (x, y), (x+w, y+h), (0, 110, 0), 2)
-
-            id, confidence = recognizer.predict(gray[y:y+h,x:x+w])
-            
-            # Check if confidence is less them 100 ==> "0" is perfect match 
-            if (confidence < 100):
-                #name = find_names(str(id))
-                confidence = "  {0}%".format(round(100 - confidence))
-                name = find_names(str(id))
-            
-            else:
-               # name = "unknown"
-                confidence = "  {0}%".format(round(100 - confidence))
-
-
-        # Get the current date and time
-        current_datetime = datetime.datetime.now()
-
-        # Print the current date and time
-        print("Current date and time:", current_datetime)
-
-        date = current_datetime.strftime("%Y-%m-%d")
-        time = current_datetime.strftime("%H:%M:%S")
-        # Write data to CSV file
-
-        with open('attendence.csv', 'a', newline='') as csvfile:
-            fieldnames = ['id', 'name', 'date', 'time']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-            # Write header if the file is empty
-            if csvfile.tell() == 0:
-                writer.writeheader()
-
-            # Write data
-            writer.writerow({'id': id, 'name': name, 'date': date, 'time': time})
-
-
-        #Calling Save_image function , send image data and form data to fetch name and id to label the image data
-        #save_image(image_data, form_data)
-
-        #Calling save_form_data to save the form details
-        #save_form_data(form_data)
-
-        return 'Image saved successfully!', 200
-
-    else:
-        return "Invalid request", 400"""
-
-
+# This method saves the attendence of the student, by taking the image, converting into encodings 
+# encodings are fed to the model, that predicts/recognize the correct face and returns the label value of the image 
+# Label is then checked for a name of the student to display.
+# Called from the attendence screen.
 @app.route('/save_attendence', methods=['POST'])
 def handle_save_attendence():
-
-    #remove this code, this taking the hardcoded image
-    """folder_path ="extra_images"
-    for filename in os.listdir(folder_path):
-        # Check if the file is an image
-        if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-            # Construct the full path to the image file
-            new_img = os.path.join(folder_path, filename)"""
-            # Preprocess and save the image
-            
-    #/////-------remove 
     name = ""
     json_data = request.json  # Accessing jsonData from the request JSON payload
     if json_data:
-        print("json data not none")
+
+        ############## INCOMING IMAGE DATA FROM WEBCAM #####################
         image_data = json_data.get("image_data")  # Accessing image_data from jsonData
         image_data = image_data.split(',')[1]  # Remove 'data:image/jpeg;base64,' prefix
         nparr = np.frombuffer(base64.b64decode(image_data), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-        #gray = cv2.cvtColor(new_img, cv2.COLOR_BGR2RGB)
-
-        #remove
-        #image = cv2.imread(new_img)
-        #   gray = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        #
         image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
-        # Check the shape of the image
-        if len(gray.shape) == 3:
-            # Image has 3 dimensions, indicating it's RGB
-            print("RGB image")
-        elif len(gray.shape) == 2:
-            # Image has 2 dimensions, indicating it's grayscale
-            print("Grayscale image")
-        # Detect faces in the frame
-            
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50)) 
+        ############## FACE DETECTION #####################
+        faces = face_cascade.detectMultiScale(image, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50)) 
 
-        # Draw rectangles around the detected faces
         if len(faces) > 0:
-            #Detecting first face in the image
             x, y, w, h = faces[0]
-            # Crop the detected face with a small margin
             margin = 0.2
             x_margin = int(w * margin)
             y_margin = int(h * margin)
-            face_gray = img[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
-            #face_gray = gray[y:y+h, x:x+w]
-            #cv2.rectangle(gray, (x, y), (x + w, y + h), (0, 255, 0), 4)
-            #cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            # Crop the detected face with a small margin
+            face = image[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
 
-            # Resize the cropped face to a standard size
-            target_size = (250, 250)
-            face_resized = cv2.resize(face_gray, target_size)
-            
-           
-            # Expand dimensions to make a batch of size 1 (required by the model)
-            face_batch = np.expand_dims(face_resized, axis=0) #commented out
-            #face_batch = np.expand_dims(face_batch, axis=3)  # Add channel dimension
-            
-            print("face shape",face_resized.shape)
-            #print("face batch",face_batch)
+            ############## FACE IMAGE RESIZING #####################
+            #Incoming picture during attendence is resized and encoded, as the model takes the 128 encoded picture for recognition
+            face_resized = cv2.resize(face, (250, 250))
 
-            # Initialize LabelEncoder
-            le = joblib.load('label_encoder.pkl')
-            # Make prediction using the loaded model
-            predictions = loaded_model.predict(face_batch)
-            
-            print("predictions",predictions)
-            # Convert prediction to label (or name)
-            predicted_label_encoded = np.argmax(predictions)  # Assuming output is one-hot encoded
-            print("encoded",predicted_label_encoded)
-            predicted_label = le.inverse_transform([predicted_label_encoded])[0]
-
-            print("label value predicted", predicted_label)
-
-            image_filename = f'{predicted_label}.jpg'
-            os.makedirs("new_images", exist_ok=True)
-            # Construct the full file path
-            filepath = os.path.join("new_images", image_filename)
-            # Save the image
-            cv2.imwrite(filepath, face_resized)
-            
-            # Get the corresponding name for the predicted label
-            name = find_names(str(predicted_label))
-           # cv2.putText(gray, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-
-            #Calling save_form_data to save the form details
-            #save_form_data(form_data)
-                # Construct response JSON object with message and name
-            response_data = {
-                'message': 'Image saved successfully!',
-                'name': name,  # Include the name in the response
-                'id': predicted_label
-            }
-
-            # Return the response as JSON
-            return jsonify(response_data), 200
+            ############## FACE IMAGE ENCODING #####################
+            encface_encs = face_encodings(face_resized)
 
 
+            ############## FACE RECOGNITION #####################
+            # Ensure that encface_encs is not empty
+            if len(encface_encs) > 0:
+                encface_encs = np.array(encface_encs)  # Convert list to numpy array
+
+                # Predict using the loaded model
+                loaded_model = load_model('trainer/my_model_dlib.keras')
+
+                predictions = loaded_model.predict(encface_encs)
+
+                confidence_scores = np.max(predictions, axis=1)
+
+                # Set a confidence threshold
+                confidence_threshold = 0.16
+                print(" confidence score:", confidence_scores)
+############## KNOWN FACE  #####################
+                # Process predictions
+                for i, confidence in enumerate(confidence_scores):
+                   
+                    if confidence > confidence_threshold:
+                        ############## FACE ID LABEL DECODING #####################
+                        # Initialize LabelEncoder
+                        le = joblib.load('label_encoder.pkl')
+
+                        # Convert predictions to labels
+                        predicted_labels_encoded = np.argmax(predictions, axis=1)  # Assuming output is one-hot encoded
+                        predicted_label = le.inverse_transform(predicted_labels_encoded)
+                        print("Detected face with label:", predicted_label, "and confidence score:", confidence)
+
+                        ############## FACE ID LABEL #####################
+                        idLabel = int(predicted_label[0])  # Access the first (and only) element of the list and convert it to an integer
+                        print("label value predicted", predicted_label, "extracted", idLabel)
+
+                        image_filename = f'{idLabel}.jpg'
+                        os.makedirs("new_images", exist_ok=True)
+
+                        # Construct the full file path
+                        filepath = os.path.join("new_images", image_filename)
+                        cv2.imwrite(filepath, face_resized)
+
+                        ############## FACE LABEL NAME  #####################
+                        # Get the corresponding name for the predicted label to be shown to the user
+                        name = find_names(str(idLabel))
+                
+                        #response object created to send to the calling fucntion with name and id label for display
+                        response_data = {
+                            'message': 'Attendence saved successfully!',
+                            'name': name,  # Include the name in the response
+                            'id': idLabel
+                        }
+############## UNKNOWN FACE  #####################                    
+                    else:
+                       print("unknown")
+                       response_data = {
+                            'message': 'Unknown face, Please register yourself!',
+                            'name': "Unknown",  # Include the name in the response
+                            'id': 111111
+                        }
+
+                # Return the response as JSON
+                return jsonify(response_data), 200
+            else:
+                print("No face detected")
+                return "No face detected", 400
         else:
             print("No face detected")
-            return "Invalid request", 400
-        #Calling Save_image function , send image data and form data to fetch name and id to label the image data
-       
-       # return 'Image saved successfully!', 200
+            return "No face detected", 400
     else:
-        print("response is 400")
+        print("Invalid request")
         return "Invalid request", 400
 
 
+
+#this method is called when user says okay to the alery showing his name and then it saves its attendence to the csv file
+#Called from the attendence screen
 @app.route('/save_attendence_in_csv', methods=['POST'])
 def save_attendence_in_csv():
     print("saving attendence in csv")
-    json_data = request.json  # Accessing jsonData from the request JSON payload
+    json_data = request.json  # Accessing jsonData payload from the request JSON payload from attendence screen
     if json_data:
-        print("json data not none")
         name = json_data.get("name")  # Accessing image_data from jsonData
         id = json_data.get("id")   # Remove 'data:image/jpeg;base64,' prefix
 
-        # Get the current date and time
+        # Get the current system date and time
         current_datetime = datetime.datetime.now()
-
-        # Print the current date and time
-        print("Current date and time:", current_datetime)
-
         date = current_datetime.strftime("%Y-%m-%d")
         time = current_datetime.strftime("%H:%M:%S")
 
-        # Check if the attendance entry already exists
+        print("here", is_attendence_saved(id, date))
+        # Check if the attendance entry already exists for a particular id and date by calling is_attendence_saved method
+        #then it send the message that the attendence is already been marked
         if is_attendence_saved(id, date):
             print("Attendence for", name, "on", date, "is already saved.")
-
             message = f" Your attendance for {date} has already been marked."
-    
             response_data = {
                 'message': message
             }
-
+        # if not marked already, then saves the entry for that student
         else:
             with open('csv_files/attendence.csv', 'a', newline='') as csvfile:
                 fieldnames = ['id', 'name', 'date', 'time']
@@ -546,7 +381,6 @@ def save_attendence_in_csv():
                 writer.writerow({'id': id, 'name': name, 'date': date, 'time': time}) #save_image(image_data, form_data)"""
 
                 message = f"Attendance saved successfully!"
-
                 response_data = {
                     'message': message,
                 }
@@ -558,7 +392,7 @@ def save_attendence_in_csv():
         print("response is 400")
         return "Invalid request", 400
 
-
+#Method used to check if the attendence is already marked or not by checking the attendence csv file
 def is_attendence_saved(id, date):
     try:
         with open('csv_files/attendence.csv', 'r', newline='') as csvfile:
@@ -571,7 +405,8 @@ def is_attendence_saved(id, date):
         return False  # Return False if the file doesn't exist
     return False
 
-#Saving the form data 
+#Saving the form data in a csv files
+# If the record exists , it will not create a duplicate copy, rather replace the older one
 def save_form_data(form_data):
     print("save_form_data")
     csv_file_path = 'csv_files/form_data.csv'
@@ -609,8 +444,6 @@ def save_form_data(form_data):
         # Write a new record if it doesn't exist
         else:
             writer.writerow(form_data)
-    
-    print("saved")
 
     return 'Form data saved successfully!', 200
 
