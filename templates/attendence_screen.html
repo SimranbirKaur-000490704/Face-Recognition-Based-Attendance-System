@@ -1,3 +1,4 @@
+<!----------------------------------<ATTENDENCE SCREEN>------------------------------------->
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -176,6 +177,7 @@
 <body>
     <div id="webcam-container" class="webcam-container">
         <div id="video-container" class="video-container">
+            <!------------open webcam-------------------->
             <img id="webcam-feed" src="/open-webcam" alt="Webcam Feed" width="100%" height="100%">
         </div>
     </div>
@@ -188,7 +190,6 @@
                  <!-- Button to take attendance -->
                 <button id="submit" class="button">Click</button>
             </div>
-            <!-- Added new -->
         </div>
     </div>
     
@@ -201,6 +202,8 @@
             boxContainer.style.transitionDelay = '0.5s'; // Delay transition for box container
         });
     </script>
+
+    <!-------- Action of submit button and webcam feed------------->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const captureButton = document.getElementById('submit');
@@ -229,17 +232,17 @@
                     });
                     const responseData = await response.json();
                     
-                    // Access and display the name if available in the response
+                    // Access and display the name if available in the response, otherwise Unknown will be displayed
                     if (responseData) {
                         if(responseData.name=="Unknown"){
                             alert(responseData.message);
                         }else{
-                        //const responseLabel = document.getElementById('responseLabel');
                              showConfirmation(`${responseData.name}`,`${responseData.id}` )
                         }
                     } else {
                         responseLabel.innerText = '';
                     }
+                  // Alert if somethings goes wrong
                 } catch (error) {
                     console.error('Error:', error);
                     alert('Please check the lighting and distance from the camera, Try again!');
@@ -247,7 +250,10 @@
             });
         });
     </script>
+
+    <!--------Logic script for a confirmation box------------>
     <script>
+        //Method to show a confirmation box (ok and cancel buttons )for validation of name by the user
         function showConfirmation(name, id) {
             const confirmed = confirm(`Confirm attendence for ${name}?`);
             if (confirmed) {
@@ -264,12 +270,12 @@
                 alert('Please check proper lighting and distance from the camera, Try again!');
             }
         }
-        //User clicked Ok/yes
+        //Method to handle the request from the user after okay, it saves the attendence (User clicked Ok/yes)
         async function saveAttendance(name, id) {
             const jsonData = {
                     name: name,
                     id: id
-                }; // Your JSON data object
+                }; //  JSON data object
             const response = await fetch('/save_attendence_in_csv', {
                 method: 'POST',
                 headers: {
@@ -279,6 +285,7 @@
             });
             const responseData = await response.json();
 
+            //Prints the message returned after saving the attendence
             if(responseData){
                 console.log(`${responseData.message}`);
                 successLabel.innerText = `${responseData.message}`
@@ -286,6 +293,8 @@
                 alert('Please try again!');
             }  
         }
+
+        //Logic script for back button
         function backButtonClicked() {
             event.preventDefault();
             window.history.back();

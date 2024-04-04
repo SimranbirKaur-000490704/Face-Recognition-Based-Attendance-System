@@ -6,56 +6,50 @@ import cv2
 import joblib
 import numpy as np
 import datetime
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 from keras.models import load_model
 import tensorflow as tf
 import dlib
-from keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
 import tensorflow_hub as hub
 import subprocess
-
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 app = Flask("FRAMS", static_folder='templates')
 
-#face detection xml
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+#--------------face detection ------------------#
+cascade_path = 'helper_files/haarcascade_frontalface_default.xml'
+face_cascade = cv2.CascadeClassifier(cascade_path)
 
-# Initiate the saved model variable
-loaded_model = load_model('trainer/my_model_dlib.keras')
+#---------Initiate and load the saved face_recognition_model.keras model ----------#
+#---------USING FaceRecognitionModel.py to create a model -------------# 
+loaded_model = load_model('trainer/face_recognition_model.keras')
 
-# Load the face detector, landmark predictor, and face recognition model
+#------------- Load the face detector, landmark predictor, and face recognition model-----------#
 face_detector = dlib.get_frontal_face_detector()
-shape_predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-face_encoder = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
+shape_predictor = dlib.shape_predictor("Dlib_files/shape_predictor_68_face_landmarks.dat")
+face_encoder = dlib.face_recognition_model_v1("Dlib_files/dlib_face_recognition_resnet_model_v1.dat")
 
-# Function to extract facial encodings from an image
-# it uses face_detector, shape_predictor, face_encoder method to generate encodings.
-def face_encodings(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    rects = face_detector(gray, 1)
-    encodings = [np.array(face_encoder.compute_face_descriptor(image, shape_predictor(gray, rect))) for rect in rects]
-    return encodings
-
-# URl for start screen
+########### START SCREEN URL ###############
 @app.route('/')
 def index():
     return render_template('start_screen.html')
 
-# URl for register screen
+########### REGISTER SCREEN URL ###############
 @app.route('/register_screen')
 def register_screen():
     return render_template('register_screen.html')
 
-# URl for attendence screen
+########### ATTENDENCE SCREEN URL ###############
 @app.route('/attendence_screen')
 def attendence_screen():
     return render_template('attendence_screen.html')
 
-# URl to open a web cam
+########### WEBCAM URL ###############
 @app.route('/open-webcam')
 def open_webcam():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+########### HANDLE IMAGE AND FORM SAVING FROM REGISTER SCREEN  ###############
 # Handle the image and form data
 # Called from register screen to send captured image and form data of a student while registering. 
 @app.route('/save_student_data', methods=['POST'])
@@ -74,21 +68,7 @@ def handle_save_image():
     else:
         return "Invalid request", 400
 
-# Route to render the table view with data from the CSV file
-# Called from start screen
-"""@app.route('/check_attendence')
-def check_attendence():
-    # Read data from CSV file
-    data = []
-    with open('csv_files/attendence.csv', 'r') as file:
-        csv_reader = csv.reader(file)
-        next(csv_reader)  # Skip the first row (headers)
-
-        for row in csv_reader:
-            data.append(row)
-            
-    return render_template('attendence_table_view.html', data=data)"""
-
+########### CHECK ATTENDENCE TABLE VIEW URL ###############
 # Route to render the table view with data from the attendence.csv file
 # Called from start screen
 @app.route('/check_attendence')
@@ -111,6 +91,8 @@ def check_attendence():
             
     return render_template('attendence_table_view.html', data=data)
 
+
+########### HANDLE REGISTERING OF A USER - CALL MODEL CLASS ###############
 # Method to register user after capturing pcitures
 # It calls the model file for training on the new face
 # Called from register screen, from register button action
@@ -118,12 +100,13 @@ def check_attendence():
 def process_registration():
     try:
         # Execute the FaceRecognitionModel.py file
-        subprocess.run(['python', 'models/FaceRecognitionModel.py'])
+        subprocess.run(['python', 'model/FaceRecognitionModel.py'])
         return jsonify({"message": "ok"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
+########### LOAD WEB CAM ###############
 # Load the webcam capture script here
 # Called from register and attendence screen for accessing a webcam
 def generate_frames():
@@ -135,7 +118,6 @@ def generate_frames():
         else:
             # Flip the frame horizontally
             frame = cv2.flip(frame, 1)  # 1 for horizontal flip, 0 for vertical flip, -1 for both
-
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
@@ -143,13 +125,11 @@ def generate_frames():
             
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
-    #save_image(cap)
     cap.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
 
-
+########### METHOD TO FIND NAME OF THE USER FROM ID ###############
 #This method is used to find name of a student from csv file for a student id after being recognised.
 def find_names(id):
     print("id in find names",id)
@@ -161,6 +141,45 @@ def find_names(id):
                 print("id in find names",name)
                 return name
             
+########### PREPROCESSING OF THE IMAGES CAPTURED FROM THE REGISTRATION SCREEN############### 
+#Function to detect face and crop the image, resize it and return
+#Preprocessing method , checks the necessary condition and return the resized face to save to calling fucntion
+def image_cleaning_resizing(image):
+    if isinstance(image, str):
+        # Load the image from file
+        image = cv2.imread(image)
+       
+    elif not isinstance(image, np.ndarray):
+        # If image is not a NumPy array, return None
+        return None
+    
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    
+    # Detect faces in the image
+    
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50))
+    
+    # Crop and save each detected face
+    #for i, (x, y, w, h) in enumerate(faces):
+    if len(faces) > 0:
+        #Detecting first face in the image
+        x, y, w, h = faces[0]
+
+        # Crop the detected face with a small margin
+        margin = 0.2
+        x_margin = int(w * margin)
+        y_margin = int(h * margin)
+        #face = image[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
+
+        face = image[max(0, y - y_margin):min(y + h + y_margin, image.shape[0]),
+                     max(0, x - x_margin):min(x + w + x_margin, image.shape[1])]
+        # Resize the cropped face to a standard size
+        target_size = (250, 250)
+        face_resized = cv2.resize(face, target_size)
+        return face_resized
+            
+####### LABELLING OF THE PREPROCESSED IMAGES CAPTURED FROM THE USER DURING REGISTRATION AND SAVING ##########
 # this method saves the registered images with proper labels by detecting the face coordinates, 
 # perform some preprocessings, cropping and resizing to (250, 250) dimensions.
 def save_image(image_data, form_data):
@@ -198,43 +217,19 @@ def save_image(image_data, form_data):
     if(save_form_data(form_data)):
         return 'Form data saved successfully!', 200
     
-   
-#Function to detect face and crop the image, resize it and return
-#Preprocessing method , checks the necessary condition and return the resized face to save to calling fucntion
-def image_cleaning_resizing(image):
-    if isinstance(image, str):
-        # Load the image from file
-        image = cv2.imread(image)
-       
-    elif not isinstance(image, np.ndarray):
-        # If image is not a NumPy array, return None
-        return None
-    
-    # Convert the image to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    
-    # Detect faces in the image
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(50, 50))
-    
-    # Crop and save each detected face
-    #for i, (x, y, w, h) in enumerate(faces):
-    if len(faces) > 0:
-        #Detecting first face in the image
-        x, y, w, h = faces[0]
 
-        # Crop the detected face with a small margin
-        margin = 0.2
-        x_margin = int(w * margin)
-        y_margin = int(h * margin)
-        #face = image[y - y_margin:y + h + y_margin, x - x_margin:x + w + x_margin]
 
-        face = image[max(0, y - y_margin):min(y + h + y_margin, image.shape[0]),
-                     max(0, x - x_margin):min(x + w + x_margin, image.shape[1])]
-        # Resize the cropped face to a standard size
-        target_size = (250, 250)
-        face_resized = cv2.resize(face, target_size)
-        return face_resized
+########### EXTRACT FACIAL ENCODINGS ###############
+# Function to extract facial encodings from an image
+# it uses face_detector, shape_predictor, face_encoder method to generate encodings.
+def face_encodings(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    rects = face_detector(gray, 1)
+    encodings = [np.array(face_encoder.compute_face_descriptor(image, shape_predictor(gray, rect))) for rect in rects]
+    return encodings
     
+
+############ SAVE ATTENDENCE URL AND LOGIC FOR HANDLING ATTENDENCE REQUEST #####################   
 # This method saves the attendence of the student, by taking the image, converting into encodings 
 # encodings are fed to the model, that predicts/recognize the correct face and returns the label value of the image 
 # Label is then checked for a name of the student to display.
@@ -266,9 +261,8 @@ def handle_save_attendence():
             #Incoming picture during attendence is resized and encoded, as the model takes the 128 encoded picture for recognition
             face_resized = cv2.resize(face, (250, 250))
 
-            ############## FACE IMAGE ENCODING #####################
+            ############## FACE IMAGE ENCODING METHOD CALL #####################
             encface_encs = face_encodings(face_resized)
-
 
             ############## FACE RECOGNITION #####################
             # Ensure that encface_encs is not empty
@@ -276,23 +270,23 @@ def handle_save_attendence():
                 encface_encs = np.array(encface_encs)  # Convert list to numpy array
 
                 # Predict using the loaded model
-                loaded_model = load_model('trainer/my_model_dlib.keras')
+                loaded_model = load_model('trainer/face_recognition_model.keras')
 
                 predictions = loaded_model.predict(encface_encs)
 
                 confidence_scores = np.max(predictions, axis=1)
 
                 # Set a confidence threshold
-                confidence_threshold = 0.16
+                confidence_threshold = 0.6
                 print(" confidence score:", confidence_scores)
-############## KNOWN FACE  #####################
+                ############## KNOWN FACE  #####################
                 # Process predictions
                 for i, confidence in enumerate(confidence_scores):
                    
                     if confidence > confidence_threshold:
                         ############## FACE ID LABEL DECODING #####################
                         # Initialize LabelEncoder
-                        le = joblib.load('label_encoder.pkl')
+                        le = joblib.load('helper_files/label_encoder.pkl')
 
                         # Convert predictions to labels
                         predicted_labels_encoded = np.argmax(predictions, axis=1)  # Assuming output is one-hot encoded
@@ -320,11 +314,11 @@ def handle_save_attendence():
                             'name': name,  # Include the name in the response
                             'id': idLabel
                         }
-############## UNKNOWN FACE  #####################                    
+                    ############## UNKNOWN FACE  #####################                    
                     else:
                        print("unknown")
                        response_data = {
-                            'message': 'Unknown face, Please register yourself!',
+                            'message': 'Unknown face! Please register yourself..',
                             'name': "Unknown",  # Include the name in the response
                             'id': 111111
                         }
@@ -342,8 +336,8 @@ def handle_save_attendence():
         return "Invalid request", 400
 
 
-
-#this method is called when user says okay to the alery showing his name and then it saves its attendence to the csv file
+############# SAVING ATTENDENCE TO CSV URL METHOD AND LOGIC #########################
+#this method is called when user says okay to the alerT showing his name and then it saves its attendence to the csv file
 #Called from the attendence screen
 @app.route('/save_attendence_in_csv', methods=['POST'])
 def save_attendence_in_csv():
@@ -391,7 +385,8 @@ def save_attendence_in_csv():
     else:
         print("response is 400")
         return "Invalid request", 400
-
+    
+############# METHOD FOR CHECKING ATTENDENCE IF IT IS ALREADY MARKED OR NOT #########################
 #Method used to check if the attendence is already marked or not by checking the attendence csv file
 def is_attendence_saved(id, date):
     try:
@@ -405,6 +400,7 @@ def is_attendence_saved(id, date):
         return False  # Return False if the file doesn't exist
     return False
 
+############### METHOD FOR SAVING THE USERFORM DATA RECEIVED FROM THE REGISTER SCREEN #############
 #Saving the form data in a csv files
 # If the record exists , it will not create a duplicate copy, rather replace the older one
 def save_form_data(form_data):

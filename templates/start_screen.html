@@ -1,3 +1,4 @@
+<!----------------------------------<START SCREEN>------------------------------------->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -176,15 +177,15 @@
                 <div class="glow"></div>
             </div>
     </div>
+
+    <!-------------BUTTONS -------------->
     <div class="container">
             <label class="label">Facial Recognition Attendance Management System</label>
             <div class="button-container">
                 <!-- Buttons inside the rectangle -->
-                <button  class="button"  
-                    onclick="registerButtonClicked('/register_screen')"><span>&#x1F4D6;</span> Register</button>
-                <button  class="button" 
-                    onclick="attendencebuttonClicked('/attendence_screen')"><span>&#x2705;</span> Take Attendence</button>
-                <button  class="button" onclick="checkAttendence('/check_attendence')"><span>&#x1F50D;</span> Check Attendence</button>
+                <button  class="button"  onclick="registerButtonClicked('/register_screen')"><span>&#x1F4D6;</span> Register</button>
+                <button  class="button" onclick="attendenceButtonClicked('/attendence_screen')"><span>&#x2705;</span> Take Attendence</button>
+                <button  class="button" onclick="checkAttendenceButtonClicked('/check_attendence')"><span>&#x1F50D;</span> Check Attendence</button>
             </div>
     </div>
     <script>
@@ -196,19 +197,20 @@
             }, 2000); // Revert back after 2 seconds
         }
     </script>
+
+    <!-------------Logic script to call the respective pages -------------->
     <script>
         function registerButtonClicked(url) {
             window.location.href = url;
         }
     </script>
     <script>
-        function attendencebuttonClicked(url) {
+        function attendenceButtonClicked(url) {
             window.location.href = url;
-            
         }
     </script>
     <script>
-        function checkAttendence(url) {
+        function checkAttendenceButtonClicked(url) {
             window.location.href = url;
         }
     </script>
