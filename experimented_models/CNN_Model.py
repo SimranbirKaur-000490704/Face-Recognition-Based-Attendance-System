@@ -63,20 +63,11 @@ class FaceRecognitionCNN:
         le = LabelEncoder()
         labels_encoded = le.fit_transform(labels)
         joblib.dump(le, 'helper_files/label_encoder.pkl')
-        
-        print("normal labels", labels)
-        print("hello",labels_encoded)
-
         self.num_classes = len(le.classes_)
         print("num cLasses",self.num_classes)
         images = np.array(images)
-        #images = images.reshape(images.shape[0], images.shape[1], images.shape[2], 3)  # Add channel dimension
-        #images = images.astype('float32') / 255  # Normalize pixel values
-
-        print("len of images", len(images))
         labels  = np.array(labels)
-
-        labels_encoded = to_categorical(labels_encoded, self.num_classes)  # Convert labels to one-hot encoding       
+        labels_encoded = to_categorical(labels_encoded, self.num_classes) 
         return images, labels_encoded
     
 
@@ -138,10 +129,7 @@ class FaceRecognitionCNN:
         y_pred_prob = self.model.predict(self.X_test)
         y_pred = np.argmax(y_pred_prob, axis=1)  # Convert predicted probabilities to class labels
         print(y_pred)
-        y_true = np.argmax(self.y_test, axis=1) 
-
-        print("pred",y_pred)
-        print("true",y_true)
+        y_true = np.argmax(self.y_test, axis=1)
 
         accuracy = accuracy_score(y_true, y_pred)
         print("accuracy", accuracy)
