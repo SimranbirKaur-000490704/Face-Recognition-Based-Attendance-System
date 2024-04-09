@@ -30,6 +30,7 @@ def extract_face_encodings(image, face_detector, shape_predictor, face_encoder):
     """
     Extract facial encodings from an image.
     """
+    #Converting the image of (250,250,3)to gray scale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     rects = face_detector(gray, 1)
     encodings = [np.array(face_encoder.compute_face_descriptor(image, shape_predictor(gray, rect))) for rect in rects]
@@ -52,26 +53,25 @@ def preprocess_images_and_labels(images_folder, face_detector, shape_predictor, 
                     continue
                 face_encs = extract_face_encodings(image, face_detector, shape_predictor, face_encoder)
                 encodings.extend(face_encs)
-                #labels.extend([os.path.basename(root)])
                 labels.extend([os.path.basename(root)] * len(face_encs))
-                print("labels",labels)
-                #Saving encosings in a pickle file
-                #save_encodings(labels, face_encs )
 
+    #Encoding the labels using label encoder
     le = LabelEncoder()
     labels_encoded = le.fit_transform(labels)
+    #Saving the encoder in pickle file.
     joblib.dump(le, 'helper_files/label_encoder.pkl')
     num_classes = len(le.classes_)
     print("clasess", num_classes)
-    labels_encoded = to_categorical(labels_encoded, num_classes)  # Convert labels to one-hot encoding
+    labels_encoded = to_categorical(labels_encoded, num_classes)  
     return np.array(encodings), np.array(labels_encoded), num_classes
 
 
 def build_model(input_shape, num_classes):
     """
-    Build the CNN model.
+    Build the NN model.
     """
-    print("num clasees", num_classes)
+    #Input shape is 
+    print("input shapae", input_shape)
     model = Sequential([
         Flatten(input_shape=input_shape),
         Dense(256, activation='relu'),
@@ -84,7 +84,7 @@ def build_model(input_shape, num_classes):
 
 def evaluate_model(model, X_test, y_test):
     """
-    Evaluate the trained CNN model.
+    Evaluate the trained model.
     """
     y_pred_prob = model.predict(X_test)
     y_pred = np.argmax(y_pred_prob, axis=1)
@@ -97,12 +97,14 @@ def evaluate_model(model, X_test, y_test):
 
 def loadModel():
     # Load face recognition models
+    logging.info("Training faces. It will take a few seconds. Please wait ...")
+
     face_detector, shape_predictor, face_encoder = load_face_recognition_models()
 
     # Preprocess images and labels
     encodings, labels, num_classes = preprocess_images_and_labels('dataset/images', face_detector, shape_predictor, face_encoder)
 
-    # Preprocess data
+    # Splitting data 80% and 20% ratio for training and testing
     X_train, X_test, y_train, y_test = train_test_split(encodings, labels, test_size=0.2, random_state=42,
                                                         stratify=labels)
 

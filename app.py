@@ -196,7 +196,7 @@ def save_image(image_data, form_data):
     image_id =  id+"_"+name
 
     #Creating a directory with person's name
-    directory = os.path.join('images', id)
+    directory = os.path.join('dataset/images', id)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -296,13 +296,6 @@ def handle_save_attendence():
                         ############## FACE ID LABEL #####################
                         idLabel = int(predicted_label[0])  # Access the first (and only) element of the list and convert it to an integer
                         print("label value predicted", predicted_label, "extracted", idLabel)
-
-                        image_filename = f'{idLabel}.jpg'
-                        os.makedirs("new_images", exist_ok=True)
-
-                        # Construct the full file path
-                        filepath = os.path.join("new_images", image_filename)
-                        cv2.imwrite(filepath, face_resized)
 
                         ############## FACE LABEL NAME  #####################
                         # Get the corresponding name for the predicted label to be shown to the user
